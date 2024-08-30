@@ -1,16 +1,24 @@
-# Une Plateforme Web d’Identité Patrimoniale : PWIP
+# Présentation générale de PWIP
 Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), la Plateforme Web d’Identité Patrimoniale ([PWIP](https://data.pampas.univ-lr.fr/pwip/)) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
 
+PWIP a été développée par deux partenaires du projet : le laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et le [Forum des Marais Atlantiques](https://forum-zones-humides.org/). 
 
-## Getting started
 
-PWIP a été développée par deux partenaires du projet : le laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et le [Forum des Marais Atlantiques](https://forum-zones-humides.org/). Elle repose sur plusieurs technologies et briques logicielles, pour stocker, requêter, visualiser et diffuser les résultats du projet comprenant : 
-- une base de données PostgreSQL/PostGIS
-- un serveur web Apache
-- un serveur d’application Tomcat 
-- un serveur cartographique Geoserver
-- une architecture reposant sur le Framework Web opensource Angular. 
+## Pré-requis
 
+PWIP est déployée sur un serveur Linux (Ubuntu - 18.04 Bionic).
+Elle repose sur différentes technologies et briques logicielles, pour stocker, requêter, visualiser et diffuser les résultats du projet comprenant : 
+- un serveur application Tomcat 8.5.20
+- un serveur cartographique Geoserver 2.15.1
+- un serveur web Apache HTTPD (2.4.29)
+- une base de données PostGreSQL/PostGIS (10.23 / 2.4)
+- une architecture reposant sur le Framework Web opensource Angular (13.3.1) complétée par :
+    - un Back Office JS : Node JS (16.10)
+    - le langage PHP (7.2.24) pour l'excution des scripts en interactions avec la base de données.
+    - des langages et méthodes de développement de l’application : Typescript, HTML, SCSS, API Rest, API Geoserver, SQL
+
+
+Les principaux scripts d'installation (ou faire un docker???) sont disponibles dans (faire lien)
 
 
 ## Add your files
@@ -70,17 +78,7 @@ On some READMEs, you may see small images that convey metadata, such as whether 
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
 ## Installation
-PWIP est déployée sur un serveur Linux (Ubuntu - 18.04 Bionic).
-Elle repose sur différentes briques logicielles :
-- un serveur application Tomcat 8.5.20
-- un serveur cartographique Geoserver 2.15.1
-- un serveur web Apache HTTPD (2.4.29)
-- une base de données PostGreSQL/PostGIS (10.23 / 2.4)
-- un développement informatique comprenant :    
-    - le Framework de développement Angular (13.3.1)
-    - un Back Office JS : Node JS (16.10)
-    - le langage PHP (7.2.24) pour l'excution des scripts en interactions avec la base de données.
-    - des langages et méthodes de développement de l’application : Typescript, HTML, SCSS, API Rest, API Geoserver, SQL
+
 
 
 ## Usage
