@@ -1,12 +1,17 @@
-# Pampas
-
+# Une Plateforme Web d’Identité Patrimoniale : PWIP
+Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), la Plateforme Web d’Identité Patrimoniale ([PWIP](https://data.pampas.univ-lr.fr/pwip/)) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
 
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+PWIP a été développée par deux partenaires du projet : le laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et le [Forum des Marais Atlantiques](https://forum-zones-humides.org/). Elle repose sur plusieurs technologies et briques logicielles, pour stocker, requêter, visualiser et diffuser les résultats du projet comprenant : 
+- une base de données PostgreSQL/PostGIS
+- un serveur web Apache
+- un serveur d’application Tomcat 
+- un serveur cartographique Geoserver
+- une architecture reposant sur le Framework Web opensource Angular. 
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+
 
 ## Add your files
 
@@ -83,8 +88,11 @@ For people who want to make changes to your project, it's helpful to have some d
 
 You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Auteurs et remerciements
+  
+PWIP a été developpé par une équipe de développement : Julien Hubert du [Forum des Marais Atlantiques](https://forum-zones-humides.org/), Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/)
+L'équipe de développement remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner, ainsi que Nicolas Becu et Benjamin Amann.
+
 
 ## License
 For open source projects, say how it is licensed.
