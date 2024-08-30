@@ -70,32 +70,44 @@ On some READMEs, you may see small images that convey metadata, such as whether 
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+PWIP est déployée sur un serveur Linux (Ubuntu - 18.04 Bionic).
+Elle repose sur différentes briques logicielles :
+- un serveur application Tomcat 8.5.20
+- un serveur cartographique Geoserver 2.15.1
+- un serveur web Apache HTTPD (2.4.29)
+- une base de données PostGreSQL/PostGIS (10.23 / 2.4)
+- un développement informatique comprenant :    
+    - le Framework de développement Angular (13.3.1)
+    - un Back Office JS : Node JS (16.10)
+    - le langage PHP (7.2.24) pour l'excution des scripts en interactions avec la base de données.
+    - des langages et méthodes de développement de l’application : Typescript, HTML, SCSS, API Rest, API Geoserver, SQL
+
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Simuler le devenir du patrimoine des marais face au chagement climatique en testant divers scénarios. L'objectif est de mieux comprendre le fonctionnement des zones humides côtières face à l’aléa de submersion marine, pour questionner l’évolution de leur identité patrimoniale en fonction de leur mode de gestion.
+Par exemple, selon le scénario, une espece animale aura une sensibilité plus ou moins grande à la submersion: non impacté, amélioration, adaptation ou disparition. 
 
 ## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Pour toutes questions : @ ?
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Feuille de route
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+
+## Contribuer à PWIP
+Nous sommes ouvets à toutes contributions.
 
 ## Auteurs et remerciements
   
-PWIP a été developpé par une équipe de développement : Julien Hubert du [Forum des Marais Atlantiques](https://forum-zones-humides.org/), Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/)
-L'équipe de développement remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner, ainsi que Nicolas Becu et Benjamin Amann.
+PWIP a été développée par deux partenaires du projet : le laboratoire [LIENSs](https://forum-zones-humides.org/) et [Forum des Marais Atlantiques](https://forum-zones-humides.org/).
+L'équipe de développement est composé de Julien Hubert du [Forum des Marais Atlantiques], Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/). Elle remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner ([LEMAR](https://www-iuem.univ-brest.fr/lemar/)), ainsi que Nicolas Becu et Benjamin Amann du LIENSs.
 
 
 ## License
-For open source projects, say how it is licensed.
+L'ensemble de la documentation et des scripts de PWIP sont en licence opensource XXXX.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+## Statut du projet
+Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par l'ANR.
+Néanmoins, une nouvelle version est à l'étude pour intégrer la salinité des marais dans les simulations. 
