@@ -1,5 +1,11 @@
-# Présentation générale de PWIP
-Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), la Plateforme Web d’Identité Patrimoniale ([PWIP](https://data.pampas.univ-lr.fr/pwip/)) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
+(images/logo-pampas.png){: width="10%"}
+<span style="color:blue">some **PWIP** text</span> 
+Plateforme Web d’Identité Patrimoniale
+(presentation_PWIP.png ){: width="30%"}
+
+
+# Présentation générale 
+Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), ([PWIP](https://data.pampas.univ-lr.fr/pwip/)) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
 
 PWIP a été développée par deux partenaires du projet : le laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et le [Forum des Marais Atlantiques](https://forum-zones-humides.org/). 
 
@@ -13,7 +19,7 @@ Elle repose sur différentes technologies et briques logicielles, pour stocker, 
 - un serveur web Apache HTTPD (2.4.29)
 - une base de données PostGreSQL/PostGIS (10.23 / 2.4)
 - une architecture reposant sur le Framework Web opensource Angular (13.3.1) complétée par :
-    - un Back Office JS : Node JS (16.10)
+    - un Back Office JS : Node JS (16.10) pour pouvoir déployer les webservices côté serveur
     - le langage PHP (7.2.24) pour l'excution des scripts en interactions avec la base de données.
     - des langages et méthodes de développement de l’application : Typescript, HTML, SCSS, API Rest, API Geoserver, SQL
 
@@ -24,6 +30,12 @@ Les principaux scripts d'installation pour ces pré-requis sont disponibles dans
 ## Architecture fonctionnelle
 Le schéma ci-dessous synthétise l'architecure simplifiée de l'application web cartographique PWIP 
 ![schema architecture simplifiée](images/schema_architecture_fonctionnelle.jpg){: width="60%"}
+
+### ANGULAR
+Ce Framework Angular côté client est basé sur le langage Typescript (surcouche Javascript permettant l’import de modules et la création de classes et d’interfaces). Angular repose sur une architecture MVC (Modèle-Vue-Contrôleur) permettant de séparer les données, le visuel et les actions pour une meilleure gestion des responsabilités.
+
+
+
 
 ## Installation
 
