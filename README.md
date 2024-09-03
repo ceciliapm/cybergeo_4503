@@ -1,7 +1,6 @@
 ![](images/logo-pampas.png){: width="10%"}
 
-[PWIP](#){.btn .btn-info}
-![Plateforme Web d’Identité Patrimoniale](images/presentation_PWIP.png){: width="30%"}
+[PWIP](#) et sa ![Plateforme Web d’Identité Patrimoniale](images/presentation_PWIP.png){: width="30%"}
 
 
 
