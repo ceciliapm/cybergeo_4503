@@ -27,7 +27,7 @@ Les principaux scripts d'installation pour ces pré-requis sont disponibles dans
 
 ## Installation
 
-
+![schema fonctionnel simplifié](Images/schema_architecture_fonctionnelle.jpg)
 
 ## Usage
 Simuler le devenir du patrimoine des marais face au chagement climatique en testant divers scénarios. L'objectif est de mieux comprendre le fonctionnement des zones humides côtières face à l’aléa de submersion marine, pour questionner l’évolution de leur identité patrimoniale en fonction de leur mode de gestion.
