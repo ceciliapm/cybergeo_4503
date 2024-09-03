@@ -2,19 +2,19 @@
 
 
 ---
-# Sommaire
- - [Présentation générale ?](#Présentation-générale)
- - [Pré-requis](#Pré-requis)
- - [Architecture fonctionnelle](#Architecture-fonctionnelle)
- - [Angular](#Angular)
- - [Installation](#Installation)
- - [Usage](#Usage)
- - [Support](#Support)
- - [Feuille de route](#Feuille-de-route)
- - [Contribuer à PWIP](#Contribuer-à-PWIP)
- - [Auteurs et remerciements](#Auteurs-et-remerciements)
- - [License](#License)
- - [Statut du projet](#Statut-du-projet)
+## Sommaire
+ - [Présentation générale](#présentation-générale)
+ - [Pré-requis](#pré-requis)
+ - [Architecture fonctionnelle](#architecture-fonctionnelle)
+ - [Angular](#angular)
+ - [Installation](#installation)
+ - [Usage](#usage)
+ - [Support](#support)
+ - [Feuille de route](#feuille-de-route)
+ - [Contribuer à PWIP](#contribuer-à-PWIP)
+ - [Auteurs et remerciements](#auteurs-et-remerciements)
+ - [License](#license)
+ - [Statut du projet](#statut-du-projet)
 
 
 # Présentation générale 
