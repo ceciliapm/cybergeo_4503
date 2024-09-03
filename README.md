@@ -22,8 +22,8 @@ Les principaux scripts d'installation pour ces pré-requis sont disponibles dans
 
 
 ## Architecture fonctionnelle
-Le schéma ci-dessous synthétise l'architecure fonctionnelle de l'application web cartographique PWIP 
-![schema fonctionnel simplifié](images/schema_architecture_fonctionnelle.jpg){: width="60%"}
+Le schéma ci-dessous synthétise l'architecure simplifiée de l'application web cartographique PWIP 
+![schema architecture simplifiée](images/schema_architecture_fonctionnelle.jpg){: width="60%"}
 
 ## Installation
 
