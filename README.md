@@ -1,6 +1,21 @@
 ![](images/logo-pampas.png){: width="5%"} [PWIP : Plateforme Web d’Identité Patrimoniale](#) ![](images/presentation_PWIP.png){: width="30%"}
 
 
+---
+# Sommaire
+ - [Présentation générale ?](#Présentation-générale)
+ - [Pré-requis](#Pré-requis)
+ - [Architecture fonctionnelle](#Architecture-fonctionnelle)
+ - [Angular](#Angular)
+ - [Installation](#Installation)
+ - [Usage](#Usage)
+ - [Support](#Support)
+ - [Feuille de route](#Feuille-de-route)
+ - [Contribuer à PWIP](#Contribuer-à-PWIP)
+ - [Auteurs et remerciements](#Auteurs-et-remerciements)
+ - [License](#License)
+ - [Statut du projet](#Statut-du-projet)
+
 
 # Présentation générale 
 Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), [PWIP](https://data.pampas.univ-lr.fr/pwip/) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
@@ -29,11 +44,26 @@ Les principaux scripts d'installation pour ces pré-requis sont disponibles dans
 Le schéma ci-dessous synthétise l'architecure simplifiée de l'application web cartographique PWIP 
 ![schema architecture simplifiée](images/schema_architecture_fonctionnelle.jpg){: width="60%"}
 
-### ANGULAR
+### Angular
 Ce Framework Angular côté client est basé sur le langage Typescript (surcouche Javascript permettant l’import de modules et la création de classes et d’interfaces). Angular repose sur une architecture MVC (Modèle-Vue-Contrôleur) permettant de séparer les données, le visuel et les actions pour une meilleure gestion des responsabilités.
 
-
-
+Arborescence des fichiers
+```bash
+├── var
+│   ├── www
+│   │   ├──html
+│   │       ├──pwip
+│   │           ├──assets
+│   │               ├──*.css
+│   │           ├──appli
+│   ├── rune
+│   ├── images
+│   ├── index.html
+│   ├── js
+│   │   ├── **/*.js
+│   └── xxx/xxxx
+├── lib
+```
 
 ## Installation
 
