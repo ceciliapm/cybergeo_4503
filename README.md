@@ -27,7 +27,7 @@ Les principaux scripts d'installation pour ces pré-requis sont disponibles dans
 
 ## Installation
 
-![schema fonctionnel simplifié](Images/schema_architecture_fonctionnelle.jpg)
+![schema fonctionnel simplifié](images/schema_architecture_fonctionnelle.jpg)
 
 ## Usage
 Simuler le devenir du patrimoine des marais face au chagement climatique en testant divers scénarios. L'objectif est de mieux comprendre le fonctionnement des zones humides côtières face à l’aléa de submersion marine, pour questionner l’évolution de leur identité patrimoniale en fonction de leur mode de gestion.
@@ -47,7 +47,7 @@ Nous sommes ouvets à toutes contributions.
 ## Auteurs et remerciements
   
 PWIP a été développée par deux partenaires du projet : le [Forum des Marais Atlantiques](https://forum-zones-humides.org/) et le laboratoire [LIENSs](https://forum-zones-humides.org/).
-L'équipe de développement est composé de Julien Hubert du [Forum des Marais Atlantiques], Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/). Elle remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner ([LEMAR](https://www-iuem.univ-brest.fr/lemar/)), ainsi que Nicolas Becu et Benjamin Amann du ([LIENSs](https://lienss.univ-larochelle.fr/).
+L'équipe de développement est composé de Julien Hubert du [Forum des Marais Atlantiques], Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/). Elle remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner ([LEMAR](https://www-iuem.univ-brest.fr/lemar/)), ainsi que Nicolas Becu et Benjamin Amann du ([LIENSs](https://lienss.univ-larochelle.fr/)).
 
 
 ## License
