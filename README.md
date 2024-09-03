@@ -1,4 +1,4 @@
-![](images/logo-pampas.png){: width="5%"} [PWIP](#) : Plateforme Web d’Identité Patrimoniale(images/presentation_PWIP.png){: width="30%"}
+![](images/logo-pampas.png){: width="5%"} [PWIP : Plateforme Web d’Identité Patrimoniale](#) ![](images/presentation_PWIP.png){: width="30%"}
 
 
 
