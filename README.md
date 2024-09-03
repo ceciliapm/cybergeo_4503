@@ -1,11 +1,11 @@
-(images/logo-pampas.png){: width="10%"}
-<span style="color:blue">some **PWIP** text</span> 
-Plateforme Web d’Identité Patrimoniale
-(presentation_PWIP.png ){: width="30%"}
+![](images/logo-pampas.png){: width="10%"}
+[**PWIP**](#){.btn .btn-info}
+![Plateforme Web d’Identité Patrimoniale](presentation_PWIP.png ){: width="30%"}
+
 
 
 # Présentation générale 
-Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), ([PWIP](https://data.pampas.univ-lr.fr/pwip/)) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
+Développée dans le cadre du projet [PAMPAS](https://pampas.recherche.univ-lr.fr/), [PWIP](https://data.pampas.univ-lr.fr/pwip/) est une plateforme cartographique interactive qui vise à mieux comprendre l’évolution du patrimoine des marais charentais face à l’aléa submersion marine. Utilisée dans le cadre d’ateliers, elle est destinée aux scientifiques, élus et gestionnaires des marais littoraux, impliqués dans la gestion du patrimoine. Elle permet, à la fois de s’interroger sur ce qu’est le patrimoine dans les marais littoraux, d’en visualiser les éléments, de tester des scénarios de submersion et des modes de gestion et enfin de comprendre leur degré de sensibilité face à la submersion marine. PWIP s’inscrit comme outil de valorisation scientifique, couplé à un volet pédagogique par son utilisation dans le cadre d’ateliers.
 
 PWIP a été développée par deux partenaires du projet : le laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et le [Forum des Marais Atlantiques](https://forum-zones-humides.org/). 
 
