@@ -49,14 +49,37 @@ Ce Framework Angular côté client est basé sur le langage Typescript (surcouch
 
 Arborescence des fichiers
 ```bash
+
+├── home
+│   ├── admpampas
+│   │   ├──scripts
+│   │        ├──fillScenario.php
+│   │        ├──resumeAttributs.php
+│   │   ├──system
+│   │       ├──plateforme
+│   │           ├──node_modules
+│   │           ├──src
+│   │               ├──app
+│   │                   ├──api
+│   │                   ├──home
+│   │                       ├──home.component.*
+│   │                   ├──interface
+│   │                       ├──interface.component.*
+│   │                   ├──notification
+│   │                       ├──notification.ts
+│   │                   ├──app.component.*
+│   │               ├──assets
+│   │               ├──environments
+│   │           ├──*.json          
 ├── var
 │   ├── www
 │   │   ├──html
 │   │       ├──pwip
 │   │           ├──assets
 │   │               ├──*.css
+│   │               ├──*.js
 │   │           ├──appli
-│   ├── rune
+│   ├── run
 │   ├── images
 │   ├── index.html
 │   ├── js
