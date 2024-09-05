@@ -47,9 +47,8 @@ Le schéma ci-dessous synthétise l'architecure simplifiée de l'application web
 ### Angular
 Ce Framework Angular côté client est basé sur le langage Typescript (surcouche Javascript permettant l’import de modules et la création de classes et d’interfaces). Angular repose sur une architecture MVC (Modèle-Vue-Contrôleur) permettant de séparer les données, le visuel et les actions pour une meilleure gestion des responsabilités.
 
-Arborescence des fichiers
+Arborescence générale des fichiers
 ```bash
-
 ├── home
 │   ├── admpampas
 │   │   ├──scripts
