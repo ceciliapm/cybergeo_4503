@@ -1,3 +1,7 @@
+/**
+* Ce script permet de mettre à jour les fiches attributaires des objets patrimoniaux en alimentant la table attributs
+* du schema idpatrimoniale et qui alimente le webservice d affichage des fiches attributaires.
+ */
 <?php
 
 $connect = pg_connect("host=localhost port=5432 dbname=pampas user=postpas password=MU03Emt#A#v_e&W#O_");
