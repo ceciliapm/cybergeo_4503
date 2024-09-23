@@ -19,7 +19,7 @@ ng generate component component-name` to generate a new component. You can also 
 The build artifacts will be stored in the `dist/` directory.
 ```\q
 ng build
-``` to build  
+```
 
 ## Running unit tests
 to execute the unit tests via [Karma](https://karma-runner.github.io).
