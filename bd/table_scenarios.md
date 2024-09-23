@@ -24,7 +24,7 @@ php fillScenario.php
 ```
 intégration des objets non spatiaux 
 ```\q
-2_sensibilite_non_spatial.sql ()
+2_sensibilite_non_spatial.sql 
 ```
 intégration des objets non concernés par la submersion
 ```\q
@@ -32,11 +32,10 @@ intégration des objets non concernés par la submersion
 ```
 mise à jour finale
 ```\q
-4_maj.sql (mise à jour finale)
+4_maj.sql
 ```
 Note : à des fins de vérification, les requêtes suivantes peuvent également être lancées. Ces requêtes ne doivent retourner aucun résultat.
-```
-\q
+```\q
 select distinct nom_vue  from scenarios.base_scenarios bs where objet is null ;
 select distinct nom_vue  from scenarios.base_scenarios bs where id_fiche is null ;
 select distinct nom_vue  from scenarios.base_scenarios bs where fonction is null ;
