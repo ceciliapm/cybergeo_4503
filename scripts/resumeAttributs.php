@@ -29,7 +29,6 @@ create table idpatrimoniale.attributs (
     url_fishbase text,
     maturite text
 );
-*/
 
 /**
  * Sélection des noms de tables (vues) dans le schéma idpatrimoniale
