@@ -13,11 +13,8 @@
 $connect = pg_connect("host=localhost port=5432 dbname=pampas user=xxxxx password=xxxxx");
 
 /**
- * Création de la table attributs dans le schéma idpatrimoniale
- *
- * @note Cette section est commentée car elle ne doit être exécutée qu'une seule fois pour créer la table.
+ * Création de la table attributs dans le schéma idpatrimoniale (à n'executer qu'une seule fois).
  */
-/*
 create table idpatrimoniale.attributs (
     kid serial,
     idfiche integer,
