@@ -87,8 +87,12 @@ Arborescence générale des fichiers
 ├── lib
 ```
 
-## Installation
+## Installation et paramétrage
+### Angular
++ principaux modules et  librairies (bootstrap, leaflet, etc)
 
+### NodeJS
+### npm
 
 
 ## Usage
