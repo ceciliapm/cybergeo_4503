@@ -126,8 +126,8 @@ L’ensemble des modules complémentaires a pu être installé via le gestionnai
 
 
 ## Usage
-Simuler le devenir du patrimoine des marais face au chagement climatique en testant divers scénarios. L'objectif est de mieux comprendre le fonctionnement des zones humides côtières face à l’aléa de submersion marine, pour questionner l’évolution de leur identité patrimoniale en fonction de leur mode de gestion.
-Par exemple, selon le scénario, une espece animale aura une sensibilité plus ou moins grande à la submersion: non impacté, amélioration, adaptation ou disparition. 
+Simuler le devenir du patrimoine des marais face au changement climatique en testant divers scénarios. L'objectif est de mieux comprendre le fonctionnement des zones humides côtières face à l’aléa de submersion marine, pour questionner l’évolution de leur identité patrimoniale en fonction de leur mode de gestion.
+Par exemple, selon le scénario, une espèce animale aura une sensibilité plus ou moins grande à la submersion: non impacté, amélioration, adaptation ou disparition. 
 
 ## Support
 Pour toutes questions : @ ?
