@@ -37,15 +37,25 @@ Elle repose sur différentes technologies et briques logicielles, pour stocker, 
     - des langages et méthodes de développement de l’application : Typescript, HTML, SCSS, API Rest, API Geoserver, SQL
 
 
-Les principaux scripts d'installation pour ces pré-requis sont disponibles dans xxx (faire lien) ou créer un docker (jamais fait, mais m'intéresse? 
+Les principaux scripts d'installation pour ces pré-requis sont disponibles dans le répertoire « installation ». A noter qu’une perspective d’amélioration sera la mise en place d’une image Docker permettant un redéploiement facilité de l’infrastructure créée, sur d’autres serveurs, pour d’autres projets.
 
 
 ## Architecture fonctionnelle
 Le schéma ci-dessous synthétise l'architecure simplifiée de l'application web cartographique PWIP 
 ![schema architecture simplifiée](images/schema_architecture_fonctionnelle.jpg){: width="60%"}
 
+Le principe est le suivant :
+- L’interface de visualisation sur laquelle l’utilisateur peut consulter données et fonds de plan côté client a été développée à l’aide du framework Javascript Angular. 
+Ce framework Angular repose sur une architecture MVC : Modèle -Vue - Contrôleur permettant de séparer les données, le visuel et les actions pour une meilleure gestion des responsabilités.
+- Cette interface communique avec la base de données PostgreSQL via des requêtes GET et POST construites à l’aide du standard de l’API REST. Les différentes API ont été déployées via la solution Node JS. Node JS peut être considéré comme un environnement permettant l'exécution de JavaScript côté serveur. 
+- L’interface permet également la diffusion d’API cartographiques : les flux WMS. Ces flux ont été produits à l’aide du serveur cartographique Geoserveur, installé sur un conteneur Java Tomcat. Ces flux permettent la diffusion des données stockées en base PostgreSQL.
+- L’ensemble des APIs est rendu fonctionnelle via la présence d’un serveur Apache
+
+
 ### Angular
-Ce Framework Angular côté client est basé sur le langage Typescript (surcouche Javascript permettant l’import de modules et la création de classes et d’interfaces). Angular repose sur une architecture MVC : Modèle (répertoire 'interface') -Vue - Contrôleur (repertoire 'api') permettant de séparer les données, le visuel et les actions pour une meilleure gestion des responsabilités.
+A noter :
+- Le contrôleur et le modèle sont représentés par l'instance de la classe TypeScript de chaque composant (fichiers ts). Le contrôleur met à jour l'état du modèle.
+- La vue correspond au rendu associé à chaque composant (fichiers html). La vue déclenche des actions sur le contrôleur et est associé à un fichier de style (fichier scss)
 
 Arborescence générale des fichiers
 ```bash
@@ -89,10 +99,30 @@ Arborescence générale des fichiers
 
 ## Installation et paramétrage
 ### Angular
-+ principaux modules et  librairies (bootstrap, leaflet, etc)
+Angular :
+L’ensemble des modules complémentaires a pu être installé via le gestionnaire de paquets npm :
+- NgBootstrap : https://www.npmjs.com/package/@ng-bootstrap/ng-bootstrap 
+- angular-highcharts : https://www.npmjs.com/package/angular-highcharts 
+- ngx-toastr : https://www.npmjs.com/package/ngx-toastr
+- ngx-slider : https://www.npmjs.com/package/@angular-slider/ngx-slider
+- ngx-spinner : https://www.npmjs.com/package/ngx-spinner
+- ng2-search-filter : https://www.npmjs.com/package/ng2-search-filter
+- ng-speed-test : https://www.npmjs.com/package/ng-speed-test 
+- leaflet : https://www.npmjs.com/package/leaflet (à noter que les dépendances leaflet-sidebar, Leaflet.Dialog, leaflet.modal, leaflet-measure, leaflet-control-boxzoom, L.Control.Opacity et L.Control.Geocoder ont également été installées)
 
 ### NodeJS
-### npm
+L’ensemble des modules complémentaires a pu être installé via le gestionnaire de paquets npm :
+- cors : https://www.npmjs.com/package/cors 
+- express : https://www.npmjs.com/package/express 
+- body-parser : https://www.npmjs.com/package/body-parser 
+- fs : https://www.npmjs.com/package/fs 
+- https : https://www.npmjs.com/package/https 
+- pg : https://www.npmjs.com/package/pg 
+- svg2png : https://www.npmjs.com/package/svg2png 
+- docx : https://www.npmjs.com/package/docx 
+- adm-zip : https://www.npmjs.com/package/adm-zip 
+- pm2 : https://www.npmjs.com/package/pm2 
+
 
 
 ## Usage
@@ -105,6 +135,12 @@ Pour toutes questions : @ ?
 
 
 ## Feuille de route (évolutions, corrections bugs...)
+Bugs :
+- Bugs constatés lorsque l’enchaînement des traitements est trop rapide
+- Mettre en place un module d’analyse et de supervision des performances
+- Améliorer la lecture des logs, ceux-ci sont actuellement produits par le gestionnaire de processus pm2 et disponible dans des fichiers classiques de logs. Un module spécifique dans l’interface web permettrait de simplifier leur lecture.
+Evolutions :
+- Intégration de modèles associés à d’autres risques (salinisation par ex.) 
 
 
 ## Contribuer à PWIP
