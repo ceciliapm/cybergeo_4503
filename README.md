@@ -37,7 +37,7 @@ Elle repose sur différentes technologies et briques logicielles, pour stocker, 
     - des langages et méthodes de développement de l’application : Typescript, HTML, SCSS, API Rest, API Geoserver, SQL
 
 
-Les principaux scripts d'installation pour ces pré-requis sont disponibles dans xxx (faire lien) ou créer un docker (jamais fait, mais m'intéresse?) 
+Les principaux scripts d'installation pour ces pré-requis sont disponibles dans xxx (faire lien) ou créer un docker (jamais fait, mais m'intéresse? 
 
 
 ## Architecture fonctionnelle
