@@ -139,6 +139,7 @@ Bugs :
 - Bugs constatés lorsque l’enchaînement des traitements est trop rapide
 - Mettre en place un module d’analyse et de supervision des performances
 - Améliorer la lecture des logs, ceux-ci sont actuellement produits par le gestionnaire de processus pm2 et disponible dans des fichiers classiques de logs. Un module spécifique dans l’interface web permettrait de simplifier leur lecture.
+
 Evolutions :
 - Intégration de modèles associés à d’autres risques (salinisation par ex.) 
 
