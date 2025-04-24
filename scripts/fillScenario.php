@@ -1,6 +1,6 @@
 <?php
 
-$connect = pg_connect("host=localhost port=5432 dbname=pampas user=postpas password=MU03Emt#A#v_e&W#O_");
+$connect = pg_connect("host=localhost port=5432 dbname=pampas user=xxxx password=xxxx");
 
 // Suppression du contenu de la table
 $sql0="DELETE from scenarios.base_scenarios";
