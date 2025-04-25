@@ -151,7 +151,7 @@ Elle remercie le groupe de travail qui a permis de co-construire cette plateform
 
 
 ## Support
-Pour toutes questions : JHubert*@*forum-marais-atl.com, cecilia.pignon-mussaud@univ-lr.fr
+Pour toutes questions : [contacts](JHubert@forum-marais-atl.com, cecilia.pignon-mussaud@univ-lr.fr)
 
 
 ## License
@@ -159,5 +159,5 @@ L'ensemble de la documentation et des scripts de PWIP sont en licence opensource
 
 
 ## Statut du projet
-Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par de l'ANR Pampas.
+Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par de l'ANR PAMPAS.
 Néanmoins, une nouvelle version est à l'étude pour intégrer la salinité des marais dans les simulations. 
