@@ -27,8 +27,8 @@ PWIP a été développée par deux partenaires du projet : le laboratoire [LIENS
 
 PWIP est déployée sur un serveur Linux (Ubuntu - 18.04 Bionic).
 Elle repose sur différentes technologies et briques logicielles, pour stocker, requêter, visualiser et diffuser les résultats du projet comprenant : 
-- un serveur application Tomcat 8.5.20
-- un serveur cartographique Geoserver 2.15.1
+- un serveur application Tomcat (8.5.20)
+- un serveur cartographique Geoserver (2.15.1)
 - un serveur web Apache HTTPD (2.4.29)
 - une base de données PostGreSQL/PostGIS (10.23 / 2.4)
 - une architecture reposant sur le Framework Web opensource Angular (13.3.1) complétée par :
