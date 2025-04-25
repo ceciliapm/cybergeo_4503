@@ -55,7 +55,7 @@ Ce framework Angular repose sur une architecture MVC : Modèle -Vue - Contrôleu
 ### Angular
 A noter :
 - Le contrôleur et le modèle sont représentés par l'instance de la classe TypeScript de chaque composant (fichiers ts). Le contrôleur met à jour l'état du modèle.
-- La vue correspond au rendu associé à chaque composant (fichiers html). La vue déclenche des actions sur le contrôleur et est associé à un fichier de style (fichier css)
+- La vue correspond au rendu associé à chaque composant (fichiers html). La vue déclenche des actions sur le contrôleur et est associé à un fichier de style (fichiers scss)
 
 Arborescence générale des fichiers
 ```bash
@@ -70,13 +70,20 @@ Arborescence générale des fichiers
 │   │           ├──src
 │   │               ├──app
 │   │                   ├──api
+                            api.component.ts
 │   │                   ├──home
-│   │                       ├──home.component.*
+│   │                       ├──home.component.ts
+                            ├──home.component.html
+                            ├──home.component.scss
 │   │                   ├──interface
-│   │                       ├──interface.component.*
+│   │                       ├──interface.component.ts  
+                            ├──interface.component.html
+                            ├──interface.component.scss
 │   │                   ├──notification
 │   │                       ├──notification.ts
-│   │                   ├──app.component.*
+│   │                   ├──app.component.ts
+                        ├──app.component.html
+                        ├──app.component.scss
 │   │               ├──assets
 │   │               ├──environments
 │   │           ├──*.json          
