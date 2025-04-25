@@ -49,13 +49,13 @@ Le principe est le suivant :
 Ce framework Angular repose sur une architecture MVC : Modèle -Vue - Contrôleur permettant de séparer les données, le visuel et les actions pour une meilleure gestion des responsabilités.
 - Cette interface communique avec la base de données PostgreSQL via des requêtes GET et POST construites à l’aide du standard de l’API REST. Les différentes API ont été déployées via la solution Node JS. Node JS peut être considéré comme un environnement permettant l'exécution de JavaScript côté serveur. 
 - L’interface permet également la diffusion d’API cartographiques : les flux WMS. Ces flux ont été produits à l’aide du serveur cartographique Geoserveur, installé sur un conteneur Java Tomcat. Ces flux permettent la diffusion des données stockées en base PostgreSQL.
-- L’ensemble des APIs est rendu fonctionnelle via la présence d’un serveur Apache
+- L’ensemble des APIs est rendu fonctionnel via la présence d’un serveur Apache
 
 
 ### Angular
 A noter :
 - Le contrôleur et le modèle sont représentés par l'instance de la classe TypeScript de chaque composant (fichiers ts). Le contrôleur met à jour l'état du modèle.
-- La vue correspond au rendu associé à chaque composant (fichiers html). La vue déclenche des actions sur le contrôleur et est associé à un fichier de style (fichier scss)
+- La vue correspond au rendu associé à chaque composant (fichiers html). La vue déclenche des actions sur le contrôleur et est associé à un fichier de style (fichier css)
 
 Arborescence générale des fichiers
 ```bash
@@ -129,10 +129,6 @@ L’ensemble des modules complémentaires a pu être installé via le gestionnai
 Simuler le devenir du patrimoine des marais face au changement climatique en testant divers scénarios. L'objectif est de mieux comprendre le fonctionnement des zones humides côtières face à l’aléa de submersion marine, pour questionner l’évolution de leur identité patrimoniale en fonction de leur mode de gestion.
 Par exemple, selon le scénario, une espèce animale aura une sensibilité plus ou moins grande à la submersion: non impacté, amélioration, adaptation ou disparition. 
 
-## Support
-Pour toutes questions : @ ?
-
-
 
 ## Feuille de route (évolutions, corrections bugs...)
 Bugs :
@@ -145,12 +141,17 @@ Evolutions :
 
 
 ## Contribuer à PWIP
-Nous sommes ouvets à toutes contributions.
+Nous sommes ouverts à toutes contributions.
+
 
 ## Auteurs et remerciements
-  
 PWIP a été développée par deux partenaires du projet : le [Forum des Marais Atlantiques](https://forum-zones-humides.org/) et le laboratoire [LIENSs](https://forum-zones-humides.org/).
-L'équipe de développement est composée de Julien Hubert du [Forum des Marais Atlantiques], Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/). Elle remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner ([LEMAR](https://www-iuem.univ-brest.fr/lemar/)), ainsi que Nicolas Becu et Benjamin Amann du ([LIENSs](https://lienss.univ-larochelle.fr/)).
+L'équipe de développement est composée de Julien Hubert du [Forum des Marais Atlantiques], Cécilia Pignon-Mussaud du laboratoire [LIENSs](https://lienss.univ-larochelle.fr/) et Fabien Blanchet du [Forum des Marais Atlantiques](https://forum-zones-humides.org/). 
+Elle remercie le groupe de travail qui a permis de co-construire cette plateforme et tout particulièrement l'équipe de coordination de l'ANR Pampas : Thomas Lacoue-Labarthe ([LIENSs](https://lienss.univ-larochelle.fr/)), Nathalie Long ([LIENSs](https://lienss.univ-larochelle.fr/)) et Marie Vagner ([LEMAR](https://www-iuem.univ-brest.fr/lemar/)), ainsi que Nicolas Becu et Benjamin Amann du ([LIENSs](https://lienss.univ-larochelle.fr/)).
+
+
+## Support
+Pour toutes questions : JHubert*@*forum-marais-atl.com, cecilia.pignon-mussaud@univ-lr.fr
 
 
 ## License
@@ -158,5 +159,5 @@ L'ensemble de la documentation et des scripts de PWIP sont en licence opensource
 
 
 ## Statut du projet
-Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par de l'ANR.
+Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par de l'ANR Pampas.
 Néanmoins, une nouvelle version est à l'étude pour intégrer la salinité des marais dans les simulations. 
