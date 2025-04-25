@@ -1,0 +1,1738 @@
+<html>
+
+<head>
+<!-- Import Font Awesome -->
+<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" crossorigin="anonymous">
+<script src="https://yigityuce.github.io/Leaflet.Control.Custom/Leaflet.Control.Custom.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200&display=swap" rel="stylesheet"> 
+</head>
+<body #screen>
+  
+<!-- Paramétrage et affichage du bandeau noir -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">&nbsp;</a>
+      <ul class="nav navbar-nav navbar-center">
+        <a href="https://data.pampas.univ-lr.fr/pwip" class="btn btn-dark" role="button"><img src="../../assets/home_white.png" class="img-fluid" alt="" width="40" height="40">&nbsp;Accueil</a>
+        <li class="nav-item dropdown" ngbDropdown>
+          <button class="btn btn-dark dropdown-toggle" id="id01" ngbDropdownToggle><i class="fa-solid fa-ballot-check"></i>&nbsp;Sélection de votre site</button>
+          <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+            <a class="dropdown-item" (click)="ZoomFierArs()"><img src="../../assets/iledere_sauniers.png" class="img-fluid" alt="" width="30" height="30">&nbsp;Fier d'Ars</a>
+            <a class="dropdown-item" (click)="ZoomTasdon()"><img src="../../assets/tasdon_marcheurs.png" class="img-fluid" alt="" width="30" height="30">&nbsp;Tasdon</a>
+            <a class="dropdown-item" (click)="ZoomBrouage()"><img src="../../assets/brouage_tour.png" class="img-fluid" alt="" width="30" height="30">&nbsp;Brouage</a>
+          </div>
+        </li>
+    </ul>
+
+    <ul class="nav navbar-nav2 navbar-center2">      
+      <li *ngIf="etatIconPanier == 'inactif'"><img src="../../assets/panier.png" class="img-fluid" alt="" width="40" height="40"></li>
+      <li *ngIf="etatIconPanier == 'actif'"><img src="../../assets/panier_actif.png" class="img-fluid" alt="" width="40" height="40" (click)="openPanier()"></li>
+      <li class = "styleNbObjets" *ngIf="etatIconPanier == 'actif'"><span class="badge bg-success-2">{{counter}} obj.</span></li>
+      <li class = "styleNbObjets" *ngIf="etatIconPanier == 'inactif'"><span class="badge bg-secondary">pas d'objets</span></li>
+      <!-- <li *ngIf="endTraitements == 'yes'"><img src="../../assets/reinit.png" class="img-fluid" title="Réinitialiser l'application" alt="" width="40" height="40" (click)="reinitAll()"></li> -->
+    </ul>
+    <ul class="nav navbar-nav">
+      <li><img src="../../assets/logo-pampas.png" class="img-fluid" alt="" width="60" height="40"></li>
+      <li class = "titlePF">PLATEFORME WEB D'IDENTITE PATRIMONIALE</li>
+      <li> </li>
+    </ul>
+  </nav>
+
+<br><br>
+
+<!-- Affichage de la carte -->
+<!-- <div class="map-container"><div class="map-frame"> -->
+<div  id="mapId"></div>
+ <!-- </div></div>  -->
+
+<!-- Spinner -->
+<ngx-spinner
+bdColor="rgba(51,51,51,0.9)"
+size="large"
+color="#0ec0fa"
+type="ball-spin"
+[fullScreen] = "true"
+>
+<p style="font-size: 20px; color: #0ec0fa; padding-top: 80px"><img src="../../assets/logo-pampas.png" class="img-fluid" alt="" width="55" height="33">&nbsp;Traitement en cours ...</p>
+</ngx-spinner>
+
+<!-- Affichage de la Sidebar -->
+<div id="sidebar" class="leaflet-sidebar collapsed">
+
+  <!-- Déclaration des menus de la Sidebar  -->
+  <div class="leaflet-sidebar-tabs">
+      <ul role="tablist"> <!-- top aligned tabs -->
+        <li><a href="#decouverte" role="tab" title="Découvrir les objets patrimoniaux" [ngStyle]="{'background-color':integrPanier === 'yes' ? '#6fb43b' : '#f3efef' }"><img src="../../assets/et1_objetsip.png" class="img-fluid" alt="" width="25" height="25"></a></li> 
+         <!-- <li><a href="#decouverte" role="tab"><i class="fa-solid fa-eye"></i></a></li> -->
+        <!-- <li><a href="#scenarios" role="tab"><i class="fas fa-film"></i></a></li> -->
+        <li><a href="#scenarios" role="tab" title="Recherche de scénarios" [ngStyle]="{'background-color':scenarioDone === 'yes' ? '#6fb43b' : '#f3efef' }"><img src="../../assets/et2_scenarios.png" class="img-fluid" alt="" width="25" height="25"></a></li> 
+        <!-- <li><a href="#resultats" role="tab"><i class="fas fa-box-open"></i></a></li> -->
+        <li (click)="majInterfaceResultats()"><a href="#resultats" role="tab" title="Résultats de l'analyse" [ngStyle]="{'background-color':endPhase3 === 'yes' ? '#6fb43b' : '#f3efef' }"><img src="../../assets/et3_graphs.png" class="img-fluid" alt="" width="25" height="25"></a></li> 
+        <li (click)="histoRapports()"><a href="#historique" role="tab" title="Historique des analyses"><img src="../../assets/et4_histo.png" class="img-fluid" alt="" width="25" height="25"></a></li>
+        <li><a  role="tab"></a></li>
+        <li><a href="#connexion" role="tab" title="Paramètres"><i class="fa-solid fa-gear" style="color:#7ca2d6"></i></a></li>
+
+      </ul>
+  </div>
+
+  <!-- Contenu de chaque menu de la Sidebar  -->
+  <div class="leaflet-sidebar-content">
+
+      <!-- ##### MENU "Découvrir les objets patrimoniaux"  ##### -->
+      <div class="leaflet-sidebar-pane" id="decouverte">
+          <h1 class="leaflet-sidebar-header">
+            Etape 1 - Découvrir les objets patrimoniaux 
+              <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+          </h1>
+          <br>
+          <div class="style">
+            <!-- Texte pour présenter le menu Découverte -->
+            <p>Je choisis les objets qui sont pour moi des éléments du patrimoine, par <b>composante</b> ou <b>par fonction patrimoniale</b>.<br> 
+              </p>
+
+              <div class="form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" (change)="displayOtherTools($event)" name="legend">
+                <small>&nbsp;Activer les outils supplémentaires de la carte</small>
+              </div>
+               <br>
+              
+              <small *ngIf="selSite != '0'"><i class="fa-solid fa-pen"></i>&nbsp;Réglage de la transparence des données</small>
+              <div *ngIf="selSite != '0'" class = "slidercustom">
+              <ngx-slider [(value)]="value" [options]="options2"></ngx-slider>     
+             </div>
+             <!-- <hr> -->
+
+             <small *ngIf="selSite != '0'"><i class="fa-sharp fa-solid fa-circle-info"></i>&nbsp;L'objet patrimonial recherché est-il disponible ?</small>
+             <div *ngIf="selSite != '0'" class="row">
+               <div class="col-10">
+                 <input class="form-control" type="text" [(ngModel)]="searchText" autocomplete="on">
+               </div>
+             </div>
+             <br>
+
+            <!-- Arborescence vide avant la sélection du Site -->
+            <div *ngIf="selSite != '0'">
+              
+
+             <!-- ### BOUTON "TEST" ### -->
+             <!--
+            <p><button class="btn btn-success btn-sm" type="button" (click)="isCollapsedComposanteTest = !isCollapsedComposanteTest" aria-controls="collapseExample"><i class="fa-sharp fa-solid fa-comment"></i>&nbsp;Test démo réunion</button></p>
+            <div [ngbCollapse]="isCollapsedComposanteTest">
+             -->
+
+                <!-- Composante Test  -->
+                <!--
+                <div *ngFor="let j of test_group ">
+                    <div *ngIf="selSite == j.site && j.type == 'data_test2'" class="form-check-cat">
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id) "/>
+                      &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_Test === true" (click)="isCollapsedComposante_Test = !isCollapsedComposante_Test"><i class="fa-solid fa-plus"></i>&nbsp;Sous-catégorie</button>
+                      &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_Test === false" (click)="isCollapsedComposante_Test = !isCollapsedComposante_Test"><i class="fa-solid fa-minus"></i>&nbsp;Sous-catégorie</button>
+                    </div>
+                </div>
+                -->
+
+                <!--
+                <div [ngbCollapse]="isCollapsedComposante_Test">
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'data_test' && !nomGroup.includes('group1')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id) "/>
+                        <label *ngIf="j.etat != 'disabled'" class="form-check-label">{{j.name}}</label><label *ngIf="j.etat == 'disabled'" class="form-check-label-grey">{{j.name}}</label>&nbsp;<img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                      </div>
+                  </div>               
+                </div>
+            
+              </div>
+            <br> 
+            -->
+
+            <!-- ### BOUTON FILTRER PAR COMPOSANTE ### -->
+            <p><button *ngIf="selSite != '0' && isCollapsedFctPatrimoniale === false" class="btn btn-success " type="button" (click)="isCollapsedComposante = !isCollapsedComposante" aria-controls="collapseExample"><img src="../../assets/filtre_cp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Chercher par composante</button></p>
+            <p><button *ngIf="selSite != '0' && isCollapsedFctPatrimoniale === true" class="btn btn-success " type="button" (click)="isCollapsedComposante = !isCollapsedComposante" aria-controls="collapseExample" disabled><img src="../../assets/filtre_cp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Chercher par composante</button></p>
+
+            <div  [ngbCollapse]="!isCollapsedComposante">
+
+                <!-- COMPOSANTE Socio-culturelle  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_csc'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" disabled (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id) "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_SC === true" (click)="isCollapsedComposante_SC = !isCollapsedComposante_SC"><i class="fa-solid fa-plus"></i>&nbsp;Socio-culturelle</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_SC === false" (click)="isCollapsedComposante_SC = !isCollapsedComposante_SC"><i class="fa-solid fa-minus"></i>&nbsp;Socio-culturelle</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupcsc')" [ngbCollapse]="isCollapsedComposante_SC">
+                  <div *ngIf="selSite != '2' && !nomGroup.includes('groupcsc')"><span class="badge2 rounded-pill bg-primary">PATRIMOINE MATERIEL</span><br></div>
+
+                  <div *ngIf="selSite < '2' && !nomGroup.includes('groupcsc')"><img src="../../assets/outils-traditionnels.png" class="img-fluid" alt="" width="30" height="30"><span class="badge rounded-pill bg-primary-2">Outils traditionnels</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'csc_pat_mat_out' && !nomGroup.includes('groupcsc')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">
+                      </div>
+                  </div>    
+                  <div *ngIf="selSite != '2' && !nomGroup.includes('groupcsc')"><img src="../../assets/produits.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-primary-2">Produits</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'csc_pat_mat_prod' && !nomGroup.includes('groupcsc')" class="form-check">
+                        <input *ngIf="j.etat == 'disabled'" class="form-check-input" type="checkbox" disabled />
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>  
+                  
+                  <span *ngIf="!nomGroup.includes('groupcsc')" class="badge2 rounded-pill bg-primary">PATRIMOINE IMMATERIEL</span><br>
+
+                  <div *ngIf="!nomGroup.includes('groupcsc')"><img src="../../assets/activites.png" class="img-fluid" alt="" width="30" height="30"><span class="badge rounded-pill bg-primary-2">Activités</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'csc_pat_immat_act' && !nomGroup.includes('groupcsc')" class="form-check">
+                        <input *ngIf="j.etat == 'disabled'" class="form-check-input" type="checkbox" disabled />
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div> 
+                  <div *ngIf="selSite > '3' && !nomGroup.includes('groupcsc')"><img src="../../assets/gestion-hydraulique.png" class="img-fluid" alt="" width="25" height="25">&nbsp;<span class="badge rounded-pill bg-primary-2">Gestion hydraulique</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                    <div *ngIf="selSite == j.site && j.type == 'csc_pat_immat_gest' && !nomGroup.includes('groupcsc')" class="form-check">
+                      <input *ngIf="j.etat == 'disabled'" class="form-check-input" type="checkbox" disabled />
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                      <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                    </div>
+                </div> 
+                <div *ngIf="!nomGroup.includes('groupcsc')"><img src="../../assets/savoirs.png" class="img-fluid" alt="" width="25" height="25">&nbsp;<span class="badge rounded-pill bg-primary-2">Savoirs</span></div>
+                <div *ngFor="let j of test_auto | filter:searchText;">
+                  <div *ngIf="selSite == j.site && j.type == 'csc_pat_immat_sav' && !nomGroup.includes('groupcsc')" class="form-check">
+                    <input *ngIf="j.etat == 'disabled'" class="form-check-input" type="checkbox" disabled />
+                    <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                    <label class="form-check-label">{{j.name}}</label>&nbsp;
+                    <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                    <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                  </div>
+              </div> 
+              <div *ngIf="selSite != '2' && !nomGroup.includes('groupcsc')"><img src="../../assets/savoir-faire.png" class="img-fluid" alt="" width="30" height="30"><span class="badge rounded-pill bg-primary-2">Savoir-faire</span></div>
+              <div *ngFor="let j of test_auto | filter:searchText;">
+                <div *ngIf="selSite == j.site && j.type == 'csc_pat_immat_savf' && !nomGroup.includes('groupcsc')" class="form-check">
+                  <input *ngIf="j.etat == 'disabled'" class="form-check-input" type="checkbox" disabled />
+                  <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                  <label class="form-check-label">{{j.name}}</label>&nbsp;
+                  <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                  <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                </div>
+              </div> 
+            </div><br>
+
+                <!-- COMPOSANTE Naturelle  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_cn'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id) "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_N === true" (click)="isCollapsedComposante_N = !isCollapsedComposante_N"><i class="fa-solid fa-plus"></i>&nbsp;Naturelle</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_N === false" (click)="isCollapsedComposante_N = !isCollapsedComposante_N"><i class="fa-solid fa-minus"></i>&nbsp;Naturelle</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupcn')" [ngbCollapse]="isCollapsedComposante_N">
+                <span *ngIf="!nomGroup.includes('groupcn')" class="badge2 rounded-pill bg-success">&nbsp;FLORE</span><br>
+
+                <div *ngIf="selSite > '3' && !nomGroup.includes('groupcn')"><img src="../../assets/algues.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Algues</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_flore_alg' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>    
+                  <div *ngIf="selSite > '3' && !nomGroup.includes('groupcn')"><img src="../../assets/arbres-arbustes.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Arbustes/Arbres</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_flore_arb' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>   
+                  <div *ngIf="selSite != '2' && !nomGroup.includes('groupcn')"><img src="../../assets/grande-unite-vegetale.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Grande unité végétale</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_flore_unit' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>  
+                  <div *ngIf="selSite < '3' && !nomGroup.includes('groupcn')"><img src="../../assets/herbacees.png" class="img-fluid" alt="" width="25" height="25">&nbsp;<span class="badge rounded-pill bg-success-2">Herbacées</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_flore_herb' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>
+
+                  <span *ngIf="!nomGroup.includes('groupcn')" class="badge2 rounded-pill bg-success">&nbsp;FAUNE</span><br>
+
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/amphibiens.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Amphibiens</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_amp' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <!-- <label class="form-check-label">{{j.name}}</label> -->
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">
+                      </div>
+                  </div>  
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/arthropodes.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Arthropodes</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_art' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input *ngIf="j.etat == 'disabled'" class="form-check-input" type="checkbox" disabled />
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;
+                        <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                        <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">
+                      </div>
+                  </div>     
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/benthos.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Benthos</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_mac' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>                   
+  <!--                 <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/mammiferes.png" class="img-fluid" alt="" width="30" height="30"><span class="badge rounded-pill bg-success-2">Mammifères</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_ois' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id) "/>
+                        <label class="form-check-label">{{j.name}}</label>
+                      </div>
+                  </div>   --> 
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/oiseaux.png" class="img-fluid" alt="" width="30" height="30"><span class="badge rounded-pill bg-success-2">Oiseaux</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_ois' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>  
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/poissons.png" class="img-fluid" alt="" width="30" height="30"><span class="badge rounded-pill bg-success-2">Poissons</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_poi' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>  
+                  <div *ngIf="selSite >'1' && !nomGroup.includes('groupcn')"><img src="../../assets/reptiles.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Reptiles</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_fau_rep' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>                    
+
+                  <span *ngIf="!nomGroup.includes('groupcn')" class="badge2 rounded-pill bg-success">&nbsp;AUTRES</span><br>
+
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/autres-vivant.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Vivant</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_aut' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>  
+                  <div *ngIf="!nomGroup.includes('groupcn')"><img src="../../assets/autres-non-vivant.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-success-2">Non vivant</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cna_aut_nv' && !nomGroup.includes('groupcn')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                  </div>  
+                </div>
+                <br>
+
+                <!-- COMPOSANTE Paysagère  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_cp'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id) "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_P === true" (click)="isCollapsedComposante_P = !isCollapsedComposante_P"><i class="fa-solid fa-plus"></i>&nbsp;Paysagère</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedComposante_P === false" (click)="isCollapsedComposante_P = !isCollapsedComposante_P"><i class="fa-solid fa-minus"></i>&nbsp;Paysagère</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupcp')" [ngbCollapse]="isCollapsedComposante_P">
+                  <div><span class="badge2 rounded-pill bg-info">HABITATS NATURELS</span><br></div>
+                  
+                  <div *ngIf="selSite < '3'"><img src="../../assets/grands-ensembles-naturels.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">Grands ensembles</span></div>
+                  <div *ngFor="let j of test_auto | filter:searchText;">
+                    <div *ngIf="selSite == j.site && j.type == 'cpa_habn_ge' && !nomGroup.includes('groupcp')" class="form-check">
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                      <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                    </div>
+                  </div> 
+                  <div *ngIf="selSite != '2'"><img src="../../assets/elements-naturels.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">Elements</span></div>
+                  <div *ngFor="let j of test_auto | filter:searchText;">
+                    <div *ngIf="selSite == j.site && j.type == 'cpa_habn_el' && !nomGroup.includes('groupcp')" class="form-check">
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                      <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                    </div>
+                  </div>  
+
+                  <span class="badge2 rounded-pill bg-info">HABITATS GERES</span><br>
+
+                  <div><img src="../../assets/grands-ensembles-geres.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">Grands ensembles</span></div>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cpa_habg_ge' && !nomGroup.includes('groupcp')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                    </div> 
+                    <img src="../../assets/elements-geres.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">Elements</span>
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'cpa_habg_el' && !nomGroup.includes('groupcp')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                      </div>
+                    </div>
+
+                  <div *ngIf="selSite != '2'"><span class="badge2 rounded-pill bg-info">OBJETS CONSTRUITS</span><br></div>
+
+                  <div *ngIf="selSite < '2'"><img src="../../assets/objets-gestion-hydraulique.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">En lien avec la gestion hydraulique</span></div>
+                  <div *ngFor="let j of test_auto | filter:searchText;">
+                    <div *ngIf="selSite == j.site && j.type == 'cpa_cons_ge' && !nomGroup.includes('groupcp')" class="form-check">
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                      <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">
+                    </div>
+                  </div> 
+                  <div *ngIf="selSite < '2'"><img src="../../assets/objets-construits-lien-avec-activites.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">En lien avec des activités</span></div>
+                  <div *ngFor="let j of test_auto | filter:searchText;">
+                    <div *ngIf="selSite == j.site && j.type == 'cpa_cons_act' && !nomGroup.includes('groupcp')" class="form-check">
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                      <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                    </div>
+                  </div>
+                  <div *ngIf="selSite > '2'"><img src="../../assets/edifices-architecturaux.png" class="img-fluid" alt="" width="30" height="30">&nbsp;<span class="badge rounded-pill bg-info-2">Edifices architecturaux</span></div>
+                  <div *ngFor="let j of test_auto | filter:searchText;">
+                    <div *ngIf="selSite == j.site && j.type == 'cpa_cons_edi' && !nomGroup.includes('groupcp')" class="form-check">
+                      <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/1') "/>
+                      <label class="form-check-label">{{j.name}}</label>&nbsp;<img src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">  
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            
+                <br>            
+
+
+             <!-- ##### BOUTON FILTRER PAR FONCTION PATRIMONIALE #####  -->
+             <p><button *ngIf="isCollapsedComposante === false" class="btn btn-success" type="button" (click)="isCollapsedFctPatrimoniale = !isCollapsedFctPatrimoniale" aria-controls="collapseExample"><img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Chercher par fonction patrimoniale</button></p>
+             <p><button *ngIf="isCollapsedComposante === true" class="btn btn-success" type="button" (click)="isCollapsedFctPatrimoniale = !isCollapsedFctPatrimoniale" aria-controls="collapseExample" disabled><img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Chercher par fonction patrimoniale</button></p>
+
+             <div [ngbCollapse]="!isCollapsedFctPatrimoniale">
+            
+                <!-- FCT PATRIMONIALE Culturelle  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_fc'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id) "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_C === true" (click)="isCollapsedFctPatrimoniale_C = !isCollapsedFctPatrimoniale_C"><i class="fa-solid fa-plus"></i>&nbsp;Culturelle</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_C === false" (click)="isCollapsedFctPatrimoniale_C = !isCollapsedFctPatrimoniale_C"><i class="fa-solid fa-minus"></i>&nbsp;Culturelle</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupfc')" [ngbCollapse]="isCollapsedFctPatrimoniale_C">
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'fpa_cul' && !nomGroup.includes('groupfc')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;
+                        <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                        <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">                        </div>
+                  </div>                        
+                </div>            
+
+                <!-- FCT PATRIMONIALE Environnementale  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_fe'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_E === true" (click)="isCollapsedFctPatrimoniale_E = !isCollapsedFctPatrimoniale_E"><i class="fa-solid fa-plus"></i>&nbsp;Environnementale</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_E === false" (click)="isCollapsedFctPatrimoniale_E = !isCollapsedFctPatrimoniale_E"><i class="fa-solid fa-minus"></i>&nbsp;Environnementale</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupfe')" [ngbCollapse]="isCollapsedFctPatrimoniale_E">
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'fpa_env' && !nomGroup.includes('groupfe')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;
+                        <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                        <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">                        </div>
+                  </div>                          
+                </div>
+                
+                <!-- FCT PATRIMONIALE Paysagère  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_fp'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_Pa === true" (click)="isCollapsedFctPatrimoniale_Pa = !isCollapsedFctPatrimoniale_Pa"><i class="fa-solid fa-plus"></i>&nbsp;Paysagère</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_Pa === false" (click)="isCollapsedFctPatrimoniale_Pa = !isCollapsedFctPatrimoniale_Pa"><i class="fa-solid fa-minus"></i>&nbsp;Paysagère</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupfp')" [ngbCollapse]="isCollapsedFctPatrimoniale_Pa">
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'fpa_pay' && !nomGroup.includes('groupfp')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;
+                        <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                        <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">                        </div>
+                  </div>                            
+                </div> 
+                
+                <!-- FCT PATRIMONIALE Productive  -->
+                <div *ngFor="let j of test_group;">
+                  <div *ngIf="selSite == j.site && j.type == 'data_test_fpr'" class="form-check-cat">
+                    <!-- <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayGroupData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/> -->
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_P === true" (click)="isCollapsedFctPatrimoniale_P = !isCollapsedFctPatrimoniale_P"><i class="fa-solid fa-plus"></i>&nbsp;Productive</button>
+                    &nbsp;<button class = "btn btn-dark btn-sm" *ngIf="isCollapsedFctPatrimoniale_P === false" (click)="isCollapsedFctPatrimoniale_P = !isCollapsedFctPatrimoniale_P"><i class="fa-solid fa-minus"></i>&nbsp;Productive</button>
+                  </div>
+                </div>
+
+                <div *ngIf="!nomGroup.includes('groupfpr')" [ngbCollapse]="isCollapsedFctPatrimoniale_P">
+                    <div *ngFor="let j of test_auto | filter:searchText;">
+                      <div *ngIf="selSite == j.site && j.type == 'fpa_pro' && !nomGroup.includes('groupfpr')" class="form-check">
+                        <input class="form-check-input" [(ngModel)]="j.value2" type="checkbox" (change)="displayData(j.vue+'/'+ j.name +'/'+ j.id + '/2') "/>
+                        <label class="form-check-label">{{j.name}}</label>&nbsp;
+                        <img *ngIf="j.etat == 'disabled'" src="../../assets/book.png" class="img-fluid" alt="" width="15" height="15" (click)="openFocusData(j.vue+'/'+ j.name)">
+                        <img *ngIf="j.etat != 'disabled'" src="../../assets/attributs.png" class="img-fluid" alt="" width="15" height="15" (click)="openFicheAttributs(j.vue)">                        
+                      </div>
+                  </div>                            
+                </div> 
+            
+            </div>
+          
+
+            <br><button type="button" *ngIf="activeButtonSelectData == 'yes' && scenarioDone != 'yes'" class="btn btn-warning" (click)="selectData()"><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mes objets patrimoniaux</button>
+            <button type="button" *ngIf="activeButtonSelectData != 'yes' && scenarioDone != 'yes'" class="btn btn-secondary" disabled><i class="fa-solid fa-circle-check" disabled></i>&nbsp;Je valide mes objets patrimoniaux</button><br>
+            <button type="button" *ngIf="activeButtonSelectData == 'yes' && scenarioDone == 'yes'" class="btn btn-secondary" disabled><i class="fa-solid fa-circle-check" disabled></i>&nbsp;Je valide mes objets patrimoniaux</button><br>
+            <small *ngIf="activeButtonSelectData == 'yes' && scenarioDone != 'yes' && etatIconPanier == 'actif'"><font color='green'><i class="fa-solid fa-thumbs-up"></i>&nbsp;Mes objets patrimoniaux sont validés</font></small>
+            <small *ngIf="activeButtonSelectData == 'yes' && scenarioDone != 'yes' && etatIconPanier != 'actif'"><i class="fa-solid fa-thumbs-up"></i>&nbsp;Un ou des objet(s) patrimoniaux sélectionné(s)</small>
+            <small *ngIf="activeButtonSelectData != 'yes' && scenarioDone != 'yes' && reinitScenarioMsg != 'yes'"><i class="fa-solid fa-circle-xmark"></i>&nbsp;Aucun objet patrimonial sélectionné.</small>
+            <small *ngIf="activeButtonSelectData == 'yes' && scenarioDone == 'yes'">Un scénario a été lancé. Vous ne pouvez plus sélectionner d'objets patrimoniaux.</small>
+            <small *ngIf="scenarioDone == 'no' && reinitScenarioMsg != 'yes'">Vos objets ont été déjà été sélectionnés. Veuillez réinitialiser l'application pour tester d'autres objets.</small>
+
+
+          </div> <!-- fin de la classe "style"  -->
+      </div> <!-- fin de l'arborescence, s'activant avec la sélection du site -->
+     </div> <!-- fin du menu "découverte" de la sidebar -->
+
+
+      <!-- ##### MENU "Choix du scénario" ##### -->
+      <div class="leaflet-sidebar-pane" id="scenarios">
+        <h1 class="leaflet-sidebar-header">
+          Etape 2 - Recherche de scénarios
+            <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+        </h1>
+        <br>
+        <div class="style">
+
+          <!-- Texte introductif du menu -->
+          <p *ngIf="selSite == '0'">Vous pourrez ici sélectionner votre scénario de submersion et lancer les traitements associés.</p>
+          <p *ngIf="selSite != '0'">Je découvre les scénarios disponibles sur le site de <b>{{nomSite}}</b> :</p>
+
+          <!-- Site du Fier d'Ars -->
+          <div *ngIf="selSite == '1'">
+
+              <p>
+              <!-- <span class="badge rounded-pill bg-info" (click)="openScenario1_1()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario</span><br> -->
+              <button class="btn btn-success btn-sm"type="button" (click)="openScenario1_1()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario 1</button><br><br>
+              <button *ngIf="isCollapsedSc1_2 === false" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_1 = !isCollapsedSc1_1" aria-controls="collapseExample"><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 1</button>
+              <button *ngIf="isCollapsedSc1_2 === true" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_1 = !isCollapsedSc1_1" aria-controls="collapseExample" disabled><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 1</button>
+              <br><small>Marais avec côtes de gestion hivernale + ouvrages ouverts</small>
+              </p>
+              
+              <div [ngbCollapse]="!isCollapsedSc1_1">
+                <small>J'affiche :</small>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc1_wet_areas_hiver">
+                  <label class="form-check-label"><i class="fa-solid fa-globe"></i>&nbsp;Les surfaces maximales en eau</label>
+                </div> 
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc1_ouv_hiver">
+                  <label class="form-check-label"><i class="fa-sharp fa-solid fa-location-dot"></i>&nbsp;Les ouvrages hydrauliques</label>
+                </div> 
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc1_subm_hiver">
+                <label class="form-check-label"><i class="fa-solid fa-water"></i>&nbsp;Les hauteurs d'eau maximales de submersion</label>
+              </div>          
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc1_ressuyage_hiver">
+                <label class="form-check-label"><i class="fa-sharp fa-solid fa-clock"></i>&nbsp;Le temps de ressuyage</label>
+              </div>  
+              <p><small><i class="fa-solid fa-video" style="color: #0080ff;"></i>&nbsp;Je consulte <a href = "https://data.pampas.univ-lr.fr/anim/FA_SC1_output_duration500.gif" target="_blank">l'animation temporelle</a> (évènement sur 24h).</small></p>
+            </div>
+
+              <br><p>
+              <button class="btn btn-success btn-sm"type="button" (click)="openScenario1_2()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario 2</button><br><br>
+              <button *ngIf="isCollapsedSc1_1 === false" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_2 = !isCollapsedSc1_2"><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+              <button *ngIf="isCollapsedSc1_1 === true" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_2 = !isCollapsedSc1_2" disabled><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+              <br><small>Marais rempli + ouvrages fermés avec réouverture au bout de 48h</small>
+              </p>
+
+              <div [ngbCollapse]="!isCollapsedSc1_2">
+                <small>J'affiche :</small>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc2_wet_areas_mblancs">
+                  <label class="form-check-label"><i class="fa-solid fa-globe"></i>&nbsp;Les surfaces maximales en eau</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc2_ouv_mblancs">
+                  <label class="form-check-label"><i class="fa-sharp fa-solid fa-location-dot"></i>&nbsp;Les ouvrages hydrauliques</label>
+                </div> 
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc2_subm_mblancs">
+                  <label class="form-check-label"><i class="fa-solid fa-water"></i>&nbsp;Les hauteurs d'eau maximales de submersion</label>
+                </div>          
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="fa_sc2_ressuyage_mblancs">
+                  <label class="form-check-label"><i class="fa-sharp fa-solid fa-clock"></i>&nbsp;Le temps de ressuyage</label>
+                </div> 
+                <p><small><i class="fa-solid fa-video" style="color: #0080ff;"></i>&nbsp;Je consulte <a href = "https://data.pampas.univ-lr.fr/anim/FA_SC2_output_duration500.gif" target="_blank">l'animation temporelle</a> (évènement sur 24h).</small></p>       
+              </div>
+
+              <br>
+              Je sélectionne mon scénario :<br>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" (change)="selectScenario($event)" name="exampleRadios" value="scenario_1_1">
+                <label class="form-check-label"><i class="fa-solid fa-circle-1"></i>&nbsp;Scénario 1</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" (change)="selectScenario($event)" name="exampleRadios" value="scenario_1_2">
+                <label class="form-check-label"><i class="fa-solid fa-circle-2"></i>&nbsp;Scénario 2</label>
+              </div>
+
+        </div>
+
+
+          <!-- Site de Tasdon -->
+          <div *ngIf="selSite == '2'">
+
+            <p>
+            <button class="btn btn-success btn-sm"type="button" (click)="openScenario2_1()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario 1</button><br><br>
+            <button *ngIf="isCollapsedSc1_2 === false" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_1 = !isCollapsedSc1_1" aria-controls="collapseExample"><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 1</button>
+            <button *ngIf="isCollapsedSc1_2 === true" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_1 = !isCollapsedSc1_1" aria-controls="collapseExample" disabled><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+            <br><small>Bassin de chasse 0,75m + vanne de Maubec fonctionnelle</small>
+            </p>
+            
+            <div [ngbCollapse]="!isCollapsedSc1_1">
+            <small>J'affiche :</small>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc1_wet_areas_mclassic">
+              <label class="form-check-label"><i class="fa-solid fa-globe"></i>&nbsp;Les surfaces en eau</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc_ouv">
+              <label class="form-check-label"><i class="fa-sharp fa-solid fa-location-dot"></i>&nbsp;Les ouvrages hydrauliques</label>
+            </div> 
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc1_subm_mclassic">
+              <label class="form-check-label"><i class="fa-solid fa-water"></i>&nbsp;Les hauteurs d'eau maximales de submersion</label>
+            </div>          
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc1_ressuyage_mclassic">
+              <label class="form-check-label"><i class="fa-sharp fa-solid fa-clock"></i>&nbsp;Le temps de ressuyage</label>
+            </div> 
+            <p><small><i class="fa-solid fa-video" style="color: #0080ff;"></i>&nbsp;Je consulte <a href = "https://data.pampas.univ-lr.fr/anim/TA_SC1_output_duration500.gif" target="_blank">l'animation temporelle</a> (évènement sur 24h).</small></p>
+          </div>
+
+            <br><p>
+            <button class="btn btn-success btn-sm"type="button" (click)="openScenario2_2()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario 2</button><br><br>
+            <button *ngIf="isCollapsedSc1_1 === false" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_2 = !isCollapsedSc1_2"><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+            <button *ngIf="isCollapsedSc1_1 === true" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_2 = !isCollapsedSc1_2" disabled><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+            <br><small>Bassin de chasse plein + vanne de Maubec défaillante</small>
+            </p>
+
+            <div [ngbCollapse]="!isCollapsedSc1_2">
+              <small>J'affiche :</small>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc2_wet_areas_mfull">
+                <label class="form-check-label"><i class="fa-solid fa-globe"></i>&nbsp;Les surfaces maximales en eau</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc_ouv">
+                <label class="form-check-label"><i class="fa-sharp fa-solid fa-location-dot"></i>&nbsp;Les ouvrages hydrauliques</label>
+              </div> 
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc2_subm_mfull">
+                <label class="form-check-label"><i class="fa-solid fa-water"></i>&nbsp;Les hauteurs d'eau maximales de submersion</label>
+              </div>          
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="ta_sc2_ressuyage_mfull">
+                <label class="form-check-label"><i class="fa-sharp fa-solid fa-clock"></i>&nbsp;Le temps de ressuyage</label>
+              </div> 
+              <p><small><i class="fa-solid fa-video" style="color: #0080ff;"></i>&nbsp;Je consulte <a href = "https://data.pampas.univ-lr.fr/anim/TA_SC2_output_duration500.gif" target="_blank">l'animation temporelle</a> (évènement sur 24h).</small></p>      
+            </div>
+
+            <br>
+            Je sélectionne mon scénario :<br>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" (change)="selectScenario($event)" name="exampleRadios" value="scenario_2_1">
+              <label class="form-check-label"><i class="fa-solid fa-circle-1"></i>&nbsp;Scénario 1</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" (change)="selectScenario($event)" name="exampleRadios" value="scenario_2_2">
+              <label class="form-check-label"><i class="fa-solid fa-circle-2"></i>&nbsp;Scénario 2</label>
+            </div>
+
+      </div>
+
+
+          <!-- Site de Moeze-Brouage -->
+          <div *ngIf="selSite == '3'">
+
+            <p>
+            <button class="btn btn-success btn-sm"type="button" (click)="openScenario3_1()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario 1</button><br><br>
+            <button *ngIf="isCollapsedSc1_2 === false" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_1 = !isCollapsedSc1_1" aria-controls="collapseExample"><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 1</button>
+            <button *ngIf="isCollapsedSc1_2 === true" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_1 = !isCollapsedSc1_1" aria-controls="collapseExample" disabled><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 1</button>
+            <br><small>Marais vide + ouvrages ouverts + brèches dans digue de 1er rang</small>
+            </p>
+            
+            <div [ngbCollapse]="!isCollapsedSc1_1">
+              <small>J'affiche :</small>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc1_wet_areas_mvides">
+                <label class="form-check-label"><i class="fa-solid fa-globe"></i>&nbsp;Les surfaces maximales en eau</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc1_ouv_mvides">
+                <label class="form-check-label"><i class="fa-sharp fa-solid fa-location-dot"></i>&nbsp;Les ouvrages hydrauliques</label>
+              </div> 
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc1_subm_mvides">
+              <label class="form-check-label"><i class="fa-solid fa-water"></i>&nbsp;Les hauteurs d'eau maximales de submersion</label>
+            </div>          
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc1_ressuyage_mvides">
+              <label class="form-check-label"><i class="fa-sharp fa-solid fa-clock"></i>&nbsp;Le temps de ressuyage</label>
+            </div> 
+            <p><small><i class="fa-solid fa-video" style="color: #0080ff;"></i>&nbsp;Je consulte <a href = "https://data.pampas.univ-lr.fr/anim/MO_SC1_output_duration500.gif" target="_blank">l'animation temporelle</a> (évènement sur 24h).</small></p>
+          </div>
+
+            <br><p>
+            <button class="btn btn-success btn-sm"type="button" (click)="openScenario3_2()"><i class="fa-solid fa-circle-info"></i>&nbsp;Définition du scénario 2</button><br><br>
+            <button *ngIf="isCollapsedSc1_1 === false" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_2 = !isCollapsedSc1_2"><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+            <button *ngIf="isCollapsedSc1_1 === true" class="btn btn-outline-success btn-sm" type="button" (click)="isCollapsedSc1_2 = !isCollapsedSc1_2" disabled><i class="fa-solid fa-arrow-right"></i>&nbsp;Je consulte les éléments du scénario 2</button>
+            <br><small>Marais blanc + ouvrages fermés + brèches dans digue de 1er rang</small>
+            </p>
+
+            <div [ngbCollapse]="!isCollapsedSc1_2">
+              <small>J'affiche :</small>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc2_wet_areas_mblancs">
+                <label class="form-check-label"><i class="fa-solid fa-globe"></i>&nbsp;Les surfaces maximales en eau</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc2_ouv_mblancs">
+                <label class="form-check-label"><i class="fa-sharp fa-solid fa-location-dot"></i>&nbsp;Les ouvrages hydrauliques</label>
+              </div> 
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc2_subm_mblancs">
+                <label class="form-check-label"><i class="fa-solid fa-water"></i>&nbsp;Les hauteurs d'eau maximales de submersion</label>
+              </div>          
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectSubmersion($event)" name="mo_sc2_ressuyage_mblancs">
+                <label class="form-check-label"><i class="fa-sharp fa-solid fa-clock"></i>&nbsp;Le temps de ressuyage</label>
+              </div> 
+              <p><small><i class="fa-solid fa-video" style="color: #0080ff;"></i>&nbsp;Je consulte <a href = "https://data.pampas.univ-lr.fr/anim/MO_SC2_output_duration500.gif" target="_blank">l'animation temporelle</a> (évènement sur 24h).</small></p>
+            </div>
+
+            <br>
+            Je sélectionne mon scénario :<br>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" (change)="selectScenario($event)" name="exampleRadios" value="scenario_3_1">
+              <label class="form-check-label"><i class="fa-solid fa-circle-1"></i>&nbsp;Scénario 1</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" (change)="selectScenario($event)" name="exampleRadios" value="scenario_3_2">
+              <label class="form-check-label"><i class="fa-solid fa-circle-2"></i>&nbsp;Scénario 2</label>
+            </div>
+
+      </div>
+
+          <br>
+          <button type="button" *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData == 'yes' && scenarioDone != 'yes' && scenariolance != 'yes'" class="btn btn-warning" (click)="runScenario()"><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mon scénario</button>
+          <button type="button" *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData == 'yes' && scenarioDone != 'yes' && scenariolance == 'yes'" class="btn btn-warning" disabled><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mon scénario</button>
+          <button type="button" *ngIf="selSite != '0' && activeButtonRunScenario != 'yes' && activeButtonSelectData != 'yes'" class="btn btn-secondary" disabled><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mon scénario</button>
+          <button type="button" *ngIf="selSite != '0' && activeButtonRunScenario != 'yes' && activeButtonSelectData == 'yes'" class="btn btn-secondary" disabled><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mon scénario</button>
+          <button type="button" *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData != 'yes'" class="btn btn-secondary" disabled><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mon scénario</button>
+          <button type="button" *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData == 'yes' && scenarioDone == 'yes'" class="btn btn-warning" disabled (click)="runScenario()"><i class="fa-solid fa-circle-check"></i>&nbsp;Je valide mon scénario</button>
+
+          <br>
+          <small *ngIf="selSite != '0' && activeButtonRunScenario != 'yes' && activeButtonSelectData != 'yes' && scenarioDone != 'yes'">Aucun scénario sélectionné.</small>
+          <small *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData != 'yes' && scenarioDone != 'yes'">Le panier est vide.</small>
+          <small *ngIf="selSite != '0' && activeButtonRunScenario != 'yes' && activeButtonSelectData == 'yes' && scenarioDone != 'yes'">Aucun scénario sélectionnée.</small>
+          <small *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData == 'yes' && scenarioDone != 'yes'"><font color='green'><i class="fa-solid fa-thumbs-up"></i>&nbsp;Construction du scénario possible.</font></small>
+          <small *ngIf="selSite != '0' && activeButtonRunScenario == 'yes' && activeButtonSelectData == 'yes' && scenarioDone == 'yes'"><font color='green'><i class="fa-solid fa-thumbs-up"></i>&nbsp;Le scénario a bien été construit.</font></small>
+
+          <br><br>
+          <button type="button" *ngIf="geoserverButton == 'yes' && endTraitements != 'yes'" class="btn btn-success" (click)="lancementGeos()"><i class="fa-sharp fa-solid fa-gear"></i>&nbsp;Je lance les traitements</button>
+          <button type="button" *ngIf="geoserverButton == 'yes' && endTraitements == 'yes'" class="btn btn-success" disabled><i class="fa-sharp fa-solid fa-gear"></i>&nbsp;Je lance les traitements</button>
+
+          <br><small *ngIf="endTraitements == 'yes'"><font color='green'><i class="fa-solid fa-thumbs-up"></i>&nbsp;Les traitements ont bien été finalisés. <br>Rendez-vous maintenant dans le menu des résultats de l'analyse.</font></small>
+          
+        </div> <!-- fin de la classe "style"  -->
+    </div> <!-- fin du menu "découverte" de la sidebar -->
+
+
+    <!-- ##### MENU "Choix du scénario" ##### -->
+    <div class="leaflet-sidebar-pane" id="resultats">
+        <h1 class="leaflet-sidebar-header">
+          Etape 3 - Résultats de l'analyse
+            <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+        </h1>
+        <br>
+        <div class="style">
+
+        <p *ngIf="endTraitements != 'yes'">Pas de résultats pour le moment.</p>
+        <!-- <p *ngIf="endTraitements == 'yes'"><font color="red">Les traitements sur les indices de sensibilité sont en cours de finalisation. Il est donc possible que vos analyses soient incomplètes.</font></p> -->
+        <span *ngIf="endTraitements == 'yes'" class="badge bg-success" (click)="openNotesGroupes()"><i class="fa-solid fa-circle-info"></i>&nbsp;+ d'explications</span><br><br>
+
+          <ngb-accordion *ngIf="endTraitements == 'yes'" #acc="ngbAccordion">
+            <ngb-panel id="toggle-1">
+              <ng-template ngbPanelTitle>
+                <i class="fa-solid fa-map-location-dot"></i>&nbsp;Cartographie des indices de sensibilité<br><br>
+              </ng-template> 
+              <ng-template ngbPanelContent>
+
+        <!-- <div *ngIf="endTraitements == 'yes'" class="alert2 alert-success" role="alert"><i class="fa-solid fa-map-location-dot"></i>&nbsp;Cartographie de la sensibilité par groupe : -->       
+
+            <div  *ngFor="let item of nbgroupes">
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" (change)="selectResultGroup($event)" name={{item.groupe}}>
+            <!-- <label class="form-check-label">{{item.groupe}}</label> -->
+            <label *ngIf="item.groupe == 'RNN'" class="form-check-label">RNN</label>
+            <label *ngIf="item.groupe == 'agrion'" class="form-check-label">Agrion de Mercure</label>
+			      <label *ngIf="item.groupe == 'algues'" class="form-check-label">Characées</label>
+            <label *ngIf="item.groupe == 'poisson_epi_mul_ath_gobi_ang'" class="form-check-label">Poissons</label>
+            <small *ngIf="item.groupe == 'poisson_epi_mul_ath_gobi_ang'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'ecomusee_marais'" class="form-check-label">Ecomusée du marais salant rétais</label>
+            <label *ngIf="item.groupe == 'macrofaune_benthique_chiro_ecrobia'" class="form-check-label">Macrofaune benthique</label>
+            <small *ngIf="item.groupe == 'macrofaune_benthique_chiro_ecrobia'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'zone_humide'" class="form-check-label">Zones humides</label>
+            <small *ngIf="item.groupe == 'zone_humide'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'ress_eau_douce_reseau'" class="form-check-label">Ressource en eau douce et réseau tertiaire</label>
+            <small *ngIf="item.groupe == 'ress_eau_douce_reseau'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'ecluses_ouvrages_hydrauliques'" class="form-check-label">Ecluses et ouvrages hydrauliques</label>
+			      <small *ngIf="item.groupe == 'ecluses_ouvrages_hydrauliques'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'claires_affinage'" class="form-check-label">Claires d'affinages ostréicoles</label>
+            <label *ngIf="item.groupe == 'bosses_jas'" class="form-check-label">Bosses et jas</label>
+            <label *ngIf="item.groupe == 'poisson_ath'" class="form-check-label">Poisson Athérine</label>
+            <label *ngIf="item.groupe == 'macrofaune_benthique_chiro_oligo'" class="form-check-label">Macrofaune benthique</label>
+            <small *ngIf="item.groupe == 'macrofaune_benthique_chiro_oligo'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'reptiles'" class="form-check-label">Reptiles</label>
+            <small *ngIf="item.groupe == 'reptiles'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'macrofaune_benthique_ceras_abra_ecro_chriro'" class="form-check-label">Macrofaune benthique</label>
+            <small *ngIf="item.groupe == 'macrofaune_benthique_ceras_abra_ecro_chriro'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'poisson_epi'" class="form-check-label">Poisson Epinoche</label>
+            <label *ngIf="item.groupe == 'arthropodes'" class="form-check-label">Arthropodes</label>
+            <small *ngIf="item.groupe == 'arthropodes'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'cabanes'" class="form-check-label">Cabanes</label>
+            <small *ngIf="item.groupe == 'cabanes'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'presale'" class="form-check-label">Pré-salés</label>
+            <label *ngIf="item.groupe == 'anciens_marais_salants'" class="form-check-label">Anciens marais salants</label>
+            <label *ngIf="item.groupe == 'prairies_naturelles'" class="form-check-label">Prairies naturelles</label>
+            <label *ngIf="item.groupe == 'amphibiens'" class="form-check-label">Amphibiens</label>
+            <small *ngIf="item.groupe == 'amphibiens'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'poisson_bar_vieil_mul_syng_dor'" class="form-check-label">Poissons</label>
+            <small *ngIf="item.groupe == 'poisson_bar_vieil_mul_syng_dor'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'citadelle_brouage'" class="form-check-label">Citadelle de Brouage></label>
+            <label *ngIf="item.groupe == 'poisson_bro_car_gar_bre_per_car'" class="form-check-label">Poissons</label>
+            <small *ngIf="item.groupe == 'poisson_bro_car_gar_bre_per_car'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'macrofaune_benthique_ceras_abra'" class="form-check-label">Macrofaune benthique</label>
+            <small *ngIf="item.groupe == 'macrofaune_benthique_ceras_abra'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'poisson_ang_gob'" class="form-check-label">Poissons</label>
+            <small *ngIf="item.groupe == 'poisson_ang_gob'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'tonnes_chasses'" class="form-check-label">Tonnes de chasse</label>
+            <label *ngIf="item.groupe == 'argile'" class="form-check-label">Argile</label>
+            <label *ngIf="item.groupe == 'esp_tropicales'" class="form-check-label">Espèces planctoniques tropicales et subtropicales</label>
+            <label *ngIf="item.groupe == 'pogonus'" class="form-check-label">Pogonus chalceus</label>
+            <label *ngIf="item.groupe == 'digues_boutillon'" class="form-check-label">Digues du Boutillon</label>
+            <label *ngIf="item.groupe == 'sel'" class="form-check-label">Sel</label>
+            <label *ngIf="item.groupe == 'canal_moulinette'" class="form-check-label">Canal de la Moulinette</label>
+            <label *ngIf="item.groupe == 'str_traditionelles'" class="form-check-label">Structures traditionnelles</label>				
+			      <small *ngIf="item.groupe == 'str_traditionelles'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'carbone'" class="form-check-label">Carbone</label>
+            <label *ngIf="item.groupe == 'vasiere'" class="form-check-label">Vasière</label>
+            <label *ngIf="item.groupe == 'peche_loisir'" class="form-check-label">Pêche de loisir</label>
+            <label *ngIf="item.groupe == 'zelotes'" class="form-check-label">Zelotes mundus</label>
+            <label *ngIf="item.groupe == 'autre_vivant'" class="form-check-label">Autres / vivant</label>				
+            <small *ngIf="item.groupe == 'autre_vivant'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'edifices_archi'" class="form-check-label">Clocher du Fier d'Ars</label>	
+            <label *ngIf="item.groupe == 'herbacees'" class="form-check-label">Herbacées</label>				
+            <small *ngIf="item.groupe == 'herbacees'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'huitres_ostreicoles'" class="form-check-label">Huîtres ostréicoles</label>	
+            <label *ngIf="item.groupe == 'jardins_familaux'" class="form-check-label">Jardins familiaux</label>
+            <label *ngIf="item.groupe == 'ostreiculture'" class="form-check-label">Ostréiculture</label>	
+            <label *ngIf="item.groupe == 'pointe_lasse'" class="form-check-label">Pointe de la Lasse</label>
+            <label *ngIf="item.groupe == 'relais_nature'" class="form-check-label">Relais nature de la Moulinette</label>				
+            <label *ngIf="item.groupe == 'roseau'" class="form-check-label">Roseau</label>	
+            <label *ngIf="item.groupe == 'roseliere'" class="form-check-label">Roselière</label>	
+            <label *ngIf="item.groupe == 'saliculture'" class="form-check-label">Saliculture</label>
+            <label *ngIf="item.groupe == 'sel'" class="form-check-label">Sel</label>
+            <small *ngIf="item.groupe == 'sel'"><br>{{item.objet}}<br></small>
+            <label *ngIf="item.groupe == 'tour_broue'" class="form-check-label">Tour de Broue et la Maison de Broue</label>
+            <label *ngIf="item.groupe == 'vegetation_dominante_marais_sales'" class="form-check-label">Végétation dominante de marais salés</label>
+          </div> 
+          </div>
+
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+          
+         <!-- </div> Fin cartographie sensibilité -->
+
+      <!-- <div *ngIf="endTraitements == 'yes'"> -->
+      <div>
+      <br>
+
+      <ngb-accordion *ngIf="endTraitements == 'yes'" #acc="ngbAccordion">
+        <ngb-panel id="toggle-1">
+          <ng-template ngbPanelTitle>
+            <i class="fa-solid fa-chart-pie"></i>&nbsp;Affichage des graphiques automatisés
+          </ng-template> 
+          <ng-template ngbPanelContent>
+
+          <ngb-accordion #acc="ngbAccordion">
+            <ngb-panel id="toggle-1">
+              <ng-template ngbPanelTitle>
+              <img src="../../assets/filtre_cp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Par "Composantes"
+              </ng-template> 
+              <ng-template ngbPanelContent>
+                <button class ="btn btn-outline-primary btn-sm" (click)="openModalGraph3_2('graph3_2')"><i class="fa-solid fa-circle-1"></i>&nbsp;Tableau de bord de ma sélection</button><br><br>  
+                <button class ="btn btn-outline-success btn-sm" (click)="openModalGraph2_2('graph2_2')"><i class="fa-solid fa-circle-2"></i>&nbsp;Indices de sensibilité par composante et objet </button><br><br>  
+                <button class ="btn btn-outline-secondary btn-sm" (click)="openModalGraph1_2('graph1_2')"><i class="fa-solid fa-circle-3"></i>&nbsp;Indices de sensibilité par composante patrimoniale</button><br><br>
+              </ng-template>
+            </ngb-panel>
+            <ngb-panel id="toggle-2">
+              <ng-template ngbPanelTitle>
+                <img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Par "Fonctions patrimonales"
+              </ng-template> 
+              <ng-template ngbPanelContent>
+                <button class ="btn btn-outline-primary btn-sm" (click)="openModalGraph3('graph3')"><i class="fa-solid fa-circle-1"></i>&nbsp;Tableau de bord de ma sélection</button><br><br>   
+                <button class ="btn btn-outline-success btn-sm" (click)="openModalGraph2('graph2')"><i class="fa-solid fa-circle-2"></i>&nbsp;Indices de sensibilité par fonction et objet </button><br><br>  
+                <button class ="btn btn-outline-secondary btn-sm" (click)="openModalGraph1('graph1')"><i class="fa-solid fa-circle-3"></i>&nbsp;Indices de sensibilité par objet patrimonial</button><br><br>  
+                <button class ="btn btn-outline-warning btn-sm" (click)="openModalGraph4('graph4')"><i class="fa-solid fa-circle-4"></i>&nbsp;Evolution avant/après de l'état des fonctions</button><br><br>  
+              </ng-template>
+            </ngb-panel>
+            <ngb-panel id="toggle-3">
+              <ng-template ngbPanelTitle>
+                <img src="../../assets/arbres-arbustes.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Par "Fonctions écologiques"
+              </ng-template> 
+                <ng-template ngbPanelContent>
+                  <button class ="btn btn-outline-primary btn-sm" (click)="openModalGraph3_3('graph3_3')"><i class="fa-solid fa-circle-1"></i>&nbsp;Tableau de bord de ma sélection</button><br><br>  
+                  <button class ="btn btn-outline-success btn-sm" (click)="openModalGraph2_3('graph2_3')"><i class="fa-solid fa-circle-2"></i>&nbsp;Indices de sensibilité par fonction et objet </button><br><br>  
+                  <button class ="btn btn-outline-secondary btn-sm" (click)="openModalGraph1_3('graph1_3')"><i class="fa-solid fa-circle-3"></i>&nbsp;Indices de sensibilité par fonction écologique</button><br><br>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+          <br>
+          <p class = "interligne"><i class="fa-solid fa-circle-info"></i>&nbsp;Vous pouvez copier-coller les graphiques sur le serveur de l'outil pour pouvoir les intégrer ultérieurement à votre rapport.<br>Attention, les graphiques relatifs aux fonctions écologiques ne feront pas partie du rapport.</p>
+          <p *ngIf="finGraphs != 'yes'"><button class ="btn btn-primary btn-sm" (click)=displayChartsAll()><i class="fa-solid fa-chart-pie"></i>&nbsp;Je copie-colle les graphiques</button></p>
+          <p *ngIf="finGraphs == 'yes'"><button class ="btn btn-primary btn-sm" disabled (click)=displayChartsAll()><i class="fa-solid fa-chart-pie"></i>&nbsp;Je copie-colle les graphiques</button><p>
+          <small *ngIf="finGraphs == 'yes' && genereGraph == 'yes' && actualSpeed >= 10"><font color='green'><i class="fa-solid fa-circle-check"></i>&nbsp;Les graphiques ont bien été copiés-collés</font></small>
+          <small *ngIf="finGraphs == 'yes' && genereGraph == 'yes' && actualSpeed <= 10"><font color='red'><i class="fa-solid fa-circle-exclamation"></i>&nbsp;Problème de connexion... il est possible que les graphiques n'aient pas été correctement copiés-collés</font></small>
+          <small *ngIf="finGraphs == 'en cours' && genereGraph == 'yes' && actualSpeed < 10"><font color='blue'><i class="fa-solid fa-hourglass-end"></i>&nbsp;En cours de traitement...<br>Attention, votre connexion risque de poser problème !</font></small>
+          <small *ngIf="finGraphs == 'en cours' && genereGraph == 'yes' && actualSpeed >= 10"><font color='blue'><i class="fa-solid fa-hourglass-end"></i>&nbsp;En cours de traitement...</font></small>
+          <!-- <small *ngIf="finGraphs != 'yes' && genereGraph == 'yes'"><font color='red'><i class="fa-regular fa-rectangle-xmark"></i>&nbsp;Les graphiques n'ont pu être générés, sûrement à cause d'un problème de connexion</font></small> -->
+        
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+        
+
+        <br>
+
+        <ngb-accordion *ngIf="endTraitements == 'yes'" #acc="ngbAccordion">
+          <ngb-panel id="toggle-1">
+            <ng-template ngbPanelTitle>
+              <i class="fa-solid fa-pen"></i>&nbsp;Rédaction de mes résultats
+            </ng-template> 
+            <ng-template ngbPanelContent>
+
+        <p class = "interligne2">Racontez l’histoire de votre scénario et produisez vos conclusions sur l'analyse lancée (texte éditable)</p>
+        <button class ="btn btn-primary btn-sm" (click)="writeConclusion()"><i class="fa-solid fa-pen"></i>&nbsp;Je rédige</button>
+
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+
+        <br>
+        <!-- <small *ngIf="userConclusion != '' && finGraphs == 'yes' && actualSpeed <= 1"><font color='red'><i class="fa-solid fa-circle-exclamation"></i>&nbsp;Problème de connexion... impossible de générer votre rapport</font></small> -->
+        <button *ngIf="userConclusion != '' && finGraphs == 'yes'" class ="btn btn-info" (click)=testExportDocx()><i class="fa-solid fa-file-word"></i>&nbsp;Je génère mon rapport</button><br>
+        <!-- <hr *ngIf="userConclusion != ''"> -->
+        <button *ngIf="endTraitements == 'yes'" type="button" class="btn btn-sm btn-danger" (click)="reinitAll()"><i class="fa-regular fa-rectangle-xmark"></i>&nbsp;Produire une nouvelle analyse et réinitialiser la plate-forme</button>
+
+      </div>
+
+    </div>
+    </div>
+
+    <div class="leaflet-sidebar-pane" id="historique">
+      <h1 class="leaflet-sidebar-header">
+        Historique des résultats
+          <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+      </h1>
+      <br>
+      <div class="style">
+        <div class="card">
+          <div class="card-header">
+            Liste des rapports générés
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nom rapport</th>
+                  <th scope="col">Date rapport</th>
+                  <th scope="col">Consulter</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of listrapports">
+                    <td><i class="fa-solid fa-note-sticky"></i>&nbsp;{{item.nom}}</td>
+                    <td>{{item.date1}}</td>
+                    <td>&nbsp;<i class="fa-solid fa-eye" style="color:blue !important;" (click)="openHistoRapport(item.nom)"></i></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              [collectionSize]="collectionSize"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              (pageChange)="histoRapports()"
+            >
+            </ngb-pagination>
+            </div>
+
+          </div>
+        </div>
+    </div>
+  </div>
+
+    <div class="leaflet-sidebar-pane" id="connexion">
+      <h1 class="leaflet-sidebar-header">
+        Paramètres de l'outil
+          <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+      </h1>
+      <br>
+      <div class="style">
+        <p><small><font color="grey">PWIP version 1.1 - Décembre 2023</font></small></p>
+        <p><small><font color="grey">[<i class="fa-solid fa-user"></i>&nbsp;Session {{token}}]</font></small></p>
+        <span class="badge bg-info">Test de votre connexion :</span><br><br>
+        <p *ngIf="speed > 0 && speed < 10"><img src="../../assets/koConn_1.png" class="img-fluid" alt="" width="60" height="60"></p>
+        <p *ngIf="speed >= 10 && speed < 20"><img src="../../assets/koConn_2.png" class="img-fluid" alt="" width="60" height="60"></p>
+        <p *ngIf="speed >= 20 && speed < 100"><img src="../../assets/okConn_1.png" class="img-fluid" alt="" width="60" height="60"></p>
+        <p *ngIf="speed >= 100"><img src="../../assets/okConn_2.png" class="img-fluid" alt="" width="60" height="60"></p>
+        <p *ngIf="speedComment != ''">{{ speedComment }} (<b>{{speed}} Mbps</b>).</p>
+        <p *ngIf="speedComment == ''">En cours de traitement</p>
+        <div *ngIf="speedComment == ''" class="spinner-border text-primary" role="status">
+        </div>
+        
+        <div *ngIf="speedComment != ''">
+        <p>Vous pouvez également tester à tout moment votre connexion :</p>
+        <div>
+        <form>
+            <small>Nombre d'itérations (15 au maximum)</small>
+            <input type="number" class="form-control" style="width:100px" [min]="1" [max]="15" name="iterations" [(ngModel)]="iterations" [disabled]="isTracking"/>
+        </form>
+        <br>
+        <button type="button" class="btn btn-success" (click)="trackSpeed()" [disabled]="isTracking"><i class="fa-solid fa-wifi"></i>&nbsp;{{ isTracking ? 'Tester' : 'Tester' }}</button>
+        </div>
+        <br>
+        
+        <div *ngIf="hasTracked || isTracking">
+        <!-- <p style="float: right; margin-bottom: 3px;">{{ speeds[0] }} MBPS</p> -->
+           <div class="card" style="width: 18rem;">
+            <div class="card-header">
+              Résultats sur {{iterations}} itérations
+            </div>
+            <div class="card-body">
+              <span *ngFor="let speedInstance of speeds">
+                <p *ngIf="speedInstance >= 20"><i class="fa-solid fa-sort-up" style="color: #29f904;"></i>&nbsp;{{speedInstance}} Mbps<br></p>
+                <p *ngIf="speedInstance > 15 && speedInstance < 20" ><i class="fa-solid fa-minus" style="color: #eef209e4;"></i>&nbsp;{{speedInstance}} Mbps<br></p>
+                <p *ngIf="speedInstance <= 15"><i  class="fa-solid fa-sort-down" style="color: #f0090d;"></i>&nbsp;{{speedInstance}} Mbps<br></p>
+              </span>
+            </div>
+          </div>
+        </div>
+        </div>
+
+      </div>
+   </div>
+
+  </div> <!-- fin du contenu (= menus) de la sidebar -->
+
+<!-- Fin de l'affichage de la Sidebar -->
+</div>
+
+
+<!-- Modal fenêtre d'initialisation -->
+<ng-template #modalInit let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title"><i class="fa-solid fa-location-dot"></i>&nbsp;Sélection de votre site</h5>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <!-- <font color="red">Version béta de la plate-forme. Mise en production le 15 décembre 2023</font><br><br>   -->
+        Veuillez sélectionner l'un des 3 sites suivants :<br><br>
+          <form [formGroup]="checkoutForm" (ngSubmit)="createNewChantier()">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="fier" formControlName="nom">
+                <label><img src="../../assets/iledere_sauniers.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Fier d'Ars</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="tasdon" formControlName="nom">
+                <label><img src="../../assets/tasdon_marcheurs.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Tasdon</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="moeze" formControlName="nom">
+                <label><img src="../../assets/brouage_tour.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Moëze-Brouage</label>
+            </div>
+            <br>
+            <small><font color="grey">[<i class="fa-solid fa-user"></i>&nbsp;Session {{token}}]</font></small>
+            <br><br>
+            <button type="button" class="btn btn-success" type="submit" (click)="modal.close('Ok click')"><i class="fas fa-check"></i>&nbsp;Valider</button>
+        </form>
+
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+<!-- Modal Data -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleData1}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{titreDataNotMappable}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class = "precisions_otherlayers"><i class="fa-solid fa-triangle-exclamation"></i>&nbsp;Donnée patrimoniale non spatialisable</div>
+        <div class = "paragraphe_otherlayers">
+        Type d'objet : <div class = "bodyFicheInfos"> {{objetDataNotMappaple}}</div><br>
+        Fonctions identifiées : <div class = "bodyFicheInfos">{{fonctionsDataNotMappable}}</div><br>
+        Description des fonctions : <div class = "bodyFicheInfos"> {{descFonctionsDataNotMappable}}</div><br>
+        Solutions de mise en patrimoine envisageables : <div class = "bodyFicheInfos">{{patriObjetDataNotMappaple}}</div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopupData()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal panier -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Mes objets patrimoniaux</h4>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="scenarioDone != 'yes'"><div class = "notePanier">
+          <i class="fa-solid fa-circle-info" style="color: #3c7cf4;"></i>&nbsp;Pour supprimer un objet de votre sélection, veuillez cliquer sur l'icône "Corbeille".<br>
+          <i class="fa-solid fa-plus" style="color: #5c80e7;"></i>&nbsp;A noter que pour chaque objet, l'ensemble de ses fonctions patrimoniales seront prises en compte.
+        </div><br></div>
+        <div *ngIf="scenarioDone == 'yes'"><span class="badge bg-dark">Le panier est désactivé.</span><br><br></div>
+        <p>Mon patrimoine se compose de {{counter}} objets patrimoniaux</p>
+        <ul>
+          <li *ngFor="let i of arrayPanier">
+            {{ i.split(';')[0] }}
+            &nbsp;<i *ngIf="scenarioDone != 'yes'" class="fa-solid fa-trash" style="color:red !important;" (click)="videItemPanier(i)"></i> 
+          </li>
+         </ul>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="scenarioDone != 'yes'" type="button" class="btn btn-danger" (click)="videPanier()">
+          Vider ma sélection
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal scénario n°1_1 -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle2}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header-modif">
+        <h4 class="modal-title">Description du scénario n°1</h4>
+      </div>
+      <div class="modal-body">
+        <i class="fa-solid fa-play"></i>&nbsp;Description : <br> 
+        <div class = "bodyFicheInfos">Xynthia + 60 cm, où les niveaux d’eau initiaux dans les marais correspondent à des niveaux classiques en période hivernale et les ouvrages hydrauliques sont ouverts dès le début de la simulation</div><br>
+        <i class="fa-solid fa-bullseye"></i>&nbsp;Objectifs : <br>
+        <div class = "bodyFicheInfos">Faire varier la hauteur d’eau dans le marais en fonction de côtes de gestion hivernales et des ouvrages ouverts.</div><br>
+        <i class="fa-solid fa-note-sticky"></i>&nbsp;Notes : <br>
+        <div class = "bodyFicheInfos">Il n’est pas possible d’imaginer une ouverture des vannes 24h après la submersion, car elles ne seront pas manœuvrables. Il faudra probablement attendre  48h avant de pouvoir y accéder.</div>
+        <!-- <div class="box">
+          <div><p><img src = "https://data.pampas.univ-lr.fr/photos/ouvrage_fierars.jpg" height="200" width="200"></p></div>
+          <div><small>Ouvrage hydraulique sur le <a href="https://fr.wikipedia.org/wiki/Fier_d%27Ars" target="_blank">Fier d'Ars</a></small></div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup2_1_1()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal scénario n°1_2 -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle2b}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header-modif">
+        <h4 class="modal-title">Description du scénario n°2</h4>
+      </div>
+      <div class="modal-body">
+        <i class="fa-solid fa-play"></i>&nbsp;Description : <br> 
+        <div class = "bodyFicheInfos">Xynthia + 60 cm, où les marais sont à blancs avant la submersion marine et les ouvrages hydrauliques sont fermés, puis ouverts à mi-marée descendante 48h après la submersion. Les marais sont dits à blancs, lorsqu’ils sont gorgés d’eau au point d’ être entièrement recouverts d’eau, suite à des pluies automnales et hivernales abondantes.</div><br>
+        <i class="fa-solid fa-bullseye"></i>&nbsp;Objectifs : <br>
+        <div class = "bodyFicheInfos">Faire varier la hauteur d’eau dans le marais en fonction de côtes de gestion hivernales et des ouvrages ouverts, dans un cas extrême de pluie abondante avant la submersion.</div><br>
+        <i class="fa-solid fa-note-sticky"></i>&nbsp;Notes : <br>
+        <div class = "bodyFicheInfos">-</div>
+        <!-- <div class="box">
+          <div><p><img src = "https://data.pampas.univ-lr.fr/photos/ouvrage_fierars.jpg" height="200" width="200"></p></div>
+          <div><small>Ouvrage hydraulique sur le <a href="https://fr.wikipedia.org/wiki/Fier_d%27Ars" target="_blank">Fier d'Ars</a></small></div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup2_1_2()">
+          OK
+        </button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Modal scénario n°2_1 -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle2c}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header-modif">
+        <h4 class="modal-title">Description du scénario n°1</h4>
+      </div>
+      <div class="modal-body">
+        <i class="fa-solid fa-play"></i>&nbsp;Description : <br> 
+        <div class = "bodyFicheInfos">Xynthia +60 cm avec le bassin de chasse initialement rempli à 0.75m NGF, avec le même niveau d’eau que dans le marais de Tasdon (gestion classique hivernale), et la vanne de Maubec fonctionnelle.</div><br>
+        <i class="fa-solid fa-bullseye"></i>&nbsp;Objectifs : <br>
+        <div class = "bodyFicheInfos">Faire varier la hauteur d’eau dans le marais en fonction de côtes de gestion hivernales et des ouvrages ouverts.</div><br>
+        <i class="fa-solid fa-note-sticky"></i>&nbsp;Notes : <br>
+        <div class = "bodyFicheInfos">La vanne de Maubec reste fonctionnelle avec une réouverture complète le lendemain de l’évènement.</div>
+        <!-- <div class="box">
+          <div><p><img src = "https://data.pampas.univ-lr.fr/photos/ouvrage_fierars.jpg" height="200" width="200"></p></div>
+          <div><small>Ouvrage hydraulique sur le <a href="https://fr.wikipedia.org/wiki/Fier_d%27Ars" target="_blank">Fier d'Ars</a></small></div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup2_2_1()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal scénario n°2_2 -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle2d}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header-modif">
+        <h4 class="modal-title">Description du scénario 2</h4>
+      </div>
+      <div class="modal-body">
+        <i class="fa-solid fa-play"></i>&nbsp;Description : <br> 
+        <div class = "bodyFicheInfos">Xynthia +60 cm avec le bassin de chasse plein, avec le même niveau d’eau que dans le marais de Tasdon (marais rempli au maximum, sans impacter les habitations) et la vanne de Maubec défaillante.</div><br>
+        <i class="fa-solid fa-bullseye"></i>&nbsp;Objectifs : <br>
+        <div class = "bodyFicheInfos">Simuler les effets d’une submersion considérant le système d’ouverture de Maubec.</div><br>
+        <i class="fa-solid fa-note-sticky"></i>&nbsp;Notes : <br>
+        <div class = "bodyFicheInfos">Vanne de Maubec défaillante, donc reste fermée tout le long de la simulation Réouverture impossible. Seule l’évacuation à travers les vantelles à clapet est fonctionnelle.</div>
+        <!-- <div class="box">
+          <div><p><img src = "https://data.pampas.univ-lr.fr/photos/ouvrage_fierars.jpg" height="200" width="200"></p></div>
+          <div><small>Ouvrage hydraulique sur le <a href="https://fr.wikipedia.org/wiki/Fier_d%27Ars" target="_blank">Fier d'Ars</a></small></div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup2_2_2()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal scénario n°3_1 -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle2e}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header-modif">
+        <h4 class="modal-title">Description du scénario 1</h4>
+      </div>
+      <div class="modal-body">
+        <i class="fa-solid fa-play"></i>&nbsp;Description : <br> 
+        <div class = "bodyFicheInfos">Xynthia+60 marais vide + ouvrages ouverts (état actuel) mais brécher les digues lorsqu’on est au niveau extrême.</div><br>
+        <i class="fa-solid fa-bullseye"></i>&nbsp;Objectifs : <br>
+        <div class = "bodyFicheInfos">Simuler l’effet d’une submersion, en considérant la brèche dans la digue de rang 1.</div><br>
+        <i class="fa-solid fa-note-sticky"></i>&nbsp;Notes : <br>
+        <div class = "bodyFicheInfos">L’eau met 5 jours à aller tout au bout du marais de Brouage, donc le temps de reéessuyage complet sera très long (peut etre un mois ?).<br>
+          Xynthia +60 met brouage sour 3,50 m d’eau  dans les parties les plus basses du marais (parcelles céréalières en arrière de la RNN). L’eau va sortir par la brèche, et par les canaux, y compris les petits canaux.<br>
+          Parfois pas de ressuyage gravitaire possible à Brouage. Ces champs sont en cuvette, et aucun ouvrage  permet de les vidanger
+        </div>
+        <!-- <div class="box">
+          <div><p><img src = "https://data.pampas.univ-lr.fr/photos/ouvrage_fierars.jpg" height="200" width="200"></p></div>
+          <div><small>Ouvrage hydraulique sur le <a href="https://fr.wikipedia.org/wiki/Fier_d%27Ars" target="_blank">Fier d'Ars</a></small></div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup2_3_1()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal scénario n°3_2 -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyle2f}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header-modif">
+        <h4 class="modal-title">Description du scénario 2</h4>
+      </div>
+      <div class="modal-body">
+        <i class="fa-solid fa-play"></i>&nbsp;Description : <br> 
+        <div class = "bodyFicheInfos">Xynthia +60 marais blanc + ouvrages fermés (état actuel) mais brecher les digues lorsqu’on est au niveau extrême.</div><br>
+        <i class="fa-solid fa-bullseye"></i>&nbsp;Objectifs : <br>
+        <div class = "bodyFicheInfos">Simuler l’effet d’une submersion, en considérant la brèche dans la digue de rang 1.</div><br>
+        <i class="fa-solid fa-note-sticky"></i>&nbsp;Notes : <br>
+        <div class = "bodyFicheInfos">L’eau met 5 jours à aller tout au bout du marais de Brouage, donc le temps de reéessuyage complet sera très long (peut etre un mois ?).<br>
+          Xynthia +60 met brouage sour 3,50 m d’eau. L’eau va sortir par la brèche, et par tous les petits canaux.<br>
+          Parfois pas de rééessuyage gravitaire possible à Brouage. Ces champs sont en cuvette, et aucun ouvrage  permet de les vidanger.
+        </div>
+        <!-- <div class="box">
+          <div><p><img src = "https://data.pampas.univ-lr.fr/photos/ouvrage_fierars.jpg" height="200" width="200"></p></div>
+          <div><small>Ouvrage hydraulique sur le <a href="https://fr.wikipedia.org/wiki/Fier_d%27Ars" target="_blank">Fier d'Ars</a></small></div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closePopup2_3_2()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph1}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Indice de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="stock"></div>
+        <img src="../../assets/legendeSensibilite.png" class="img-fluid"/>     
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph1()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph2}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="bar"></div>     
+        <p>Valeurs des indices de sensibilité :<br>0 : état amélioré | 1 : non impacté | 2 : état dégradé | 3 : état disparu</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph2()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph3}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="heatmap"></div>  
+        <div align="center" id="heatmap2"></div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph3()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph4}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_fp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="sankey"></div>   
+        <p>L'objectif est ici de voir les évolutions du marais par fonction.<br>
+          Une grille de pondération est ici appliquée et affecte des valeurs d'autant plus basses que l'état de la fonction se dégrade .
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph4()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph1_2}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_cp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="stock_2"></div>     
+        <img src="../../assets/legendeSensibilite.png" class="img-fluid"/>     
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph1_2()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph2_2}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_cp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="bar_2"></div>     
+        <p>Valeurs des indices de sensibilité :<br>0 : état amélioré | 1 : non impacté | 2 : état dégradé | 3 : état disparu</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph2_2()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph3_2}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/filtre_cp.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="heatmap_2"></div>  
+        <div align="center" id="heatmap_2_2"></div>      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph3_2()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph1_3}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/arbres-arbustes.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="stock_3"></div>     
+        <img src="../../assets/legendeSensibilite.png" class="img-fluid"/><br><br>
+        <img src="../../assets/fcts_ecologiques_desc.JPG" class="img-fluid"/>    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph1_3()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph2_3}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/arbres-arbustes.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="bar_3"></div>     
+        <p>Valeurs des indices de sensibilité :<br>0 : état amélioré | 1 : non impacté | 2 : état dégradé | 3 : état disparu</p>
+        <p><img src="../../assets/fcts_ecologiques_desc.JPG" class="img-fluid"/></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph2_3()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Graph Test-->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleGraph3_3}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content-large">
+      <div class="modal-header">
+        <h4 class="modal-title"><img src="../../assets/arbres-arbustes.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Analyse des indices de sensibilité</h4>
+      </div>
+      <div class="modal-body">
+        <div id="heatmap_3"></div>  
+        <div align="center" id="heatmap_3_2"></div><br>  
+        <div><img src="../../assets/fcts_ecologiques_desc.JPG" class="img-fluid"/></div>      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModalGraph3_3()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Write Conclusion -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleWriteConclusion}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+            <form [formGroup]="checkoutForm2" (ngSubmit)="createNewConclusion()">
+              <div>
+                  <textarea id="concl" class="form-control" formControlName="concl" placeholder="Description" rows="15"></textarea>
+              </div>
+              <br>
+              <button type="button" class="btn btn-success" type="submit"><i class="fas fa-check"></i>&nbsp;Valider</button>
+              <br><br><div *ngIf="userConclusion != ''" class = 'userConcl' ><font color = "green">Votre conclusion a bien été prise en compte. Vous allez pouvoir générer votre rapport.</font></div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeWriteConclusion()">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Write Conclusion -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayStyleNotesGroupes}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Notes sur les groupes d'objets patrimoniaux</h5>
+      </div>
+      <div class="modal-body">
+        Explication sur les groupes : <br>
+        [En cours de validation] <br><br>
+        Pour tout complément d'explication, veuillez consulter les éléments présentés sur <a href = "https://data.pampas.univ-lr.fr/pwip">la page d'accueil de l'outil</a>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeNotesGroupes()">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Data -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayFicheAttributs}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Fiche informative | {{attNom}}</h4>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tbody>
+            <tr>
+              <td *ngIf="attPhoto != null"><img src="{{attPhoto}}" class="img-fluid" alt="" width="200" height="132"></td>
+              <td *ngIf="attPhoto == null"><img src="https://data.pampas.univ-lr.fr/photos/noimage.png" class="img-fluid" alt="" width="120" height="80"></td>
+              <td *ngIf="attType != 'autre'">{{attNomSci}}
+              <div *ngIf="attMat != null" class = "bodyFicheInfos">Maturité : {{attMat}}</div>
+              <div *ngIf="attType != 'autre'"><div class = "bodyFicheInfos"><a href="{{attInpn}}" target="_blank"><img src="../../assets/inpn.png" class="img-fluid" alt="" width="57" height="26"></a></div></div>
+              <div *ngIf="attType == 'poissons'"><div class = "bodyFicheInfos"><a href="{{attFishbase}}" target="_blank"><img src="../../assets/fishbase.png" class="img-fluid" alt="" width="30" height="30"></a></div></div>
+              </td><br>
+            </tr> 
+          </tbody> 
+        </table><br>
+        <div><img src="../../assets/filtre_fp_blue.png" class="img-fluid" alt="" width="20" height="20">&nbsp;Fonctions patrimoniales identifiées : <br><div class = "bodyFicheInfos">{{attFct}}</div></div><br>
+        <div *ngIf="attInfo != null"><i class="fa-solid fa-circle-info" style="color: #6189f3;"></i>&nbsp;Commentaires : <br><div class = "bodyFicheInfos">{{attInfo}}</div></div><br>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeFicheAttributs()">
+          OK
+        </button>
+      </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal Consultation des rapports -->
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{'display':displayHistoRapport}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" *ngFor="let item of detailrapports">
+        <h5 class="modal-title"><i class="fa-solid fa-note-sticky"></i>&nbsp;Résumé du rapport <i>{{item.nom}}</i> | <i class="fa-solid fa-location-dot" style="color: #6189f3;"></i>&nbsp;{{item.site}}</h5>
+      </div>
+      <div class="modal-body">
+        <div  *ngFor="let item of detailrapports">
+          <i class="fa-solid fa-eye" style="color: #07cb1e;"></i>&nbsp;Données patrimoniales :<br>
+          <div class = "bodyFicheInfos">{{item.objet}}</div><br>
+          <i class="fas fa-film" style="color: #07cb1e;"></i>&nbsp;Scénario :<br>
+          <div class = "bodyFicheInfos">{{item.desc_scenario}}</div><br>
+          <i class="fas fa-box-open" style="color: #07cb1e;"></i>&nbsp;Conclusion de l'utilisateur : <br>
+          <div class = "bodyFicheInfos">{{item.conclusion}}</div><br>
+          <a class="btn btn-light btn-sm" href="https://data.pampas.univ-lr.fr/node/downloadGraphs/{{item.nom}}" download><i class="fas fa-download" style="color: red;"></i>&nbsp;Télécharger les graphiques automatisés</a>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeHistoRapport()">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
