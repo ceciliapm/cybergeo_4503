@@ -151,7 +151,7 @@ Elle remercie le groupe de travail qui a permis de co-construire cette plateform
 
 
 ## Support
-Pour toutes questions : [[contacts](JHubert@forum-marais-atl.com, cecilia.pignon-mussaud@univ-lr.fr)
+Pour toutes questions : [JHubert*at*forum-marais-atl.com, cecilia.pignon-mussaud*at*univ-lr.fr)]
 
 
 ## License
