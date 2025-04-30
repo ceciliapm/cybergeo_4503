@@ -6,7 +6,7 @@
  - [Présentation générale](#présentation-générale)
  - [Pré-requis](#pré-requis)
  - [Architecture fonctionnelle](#architecture-fonctionnelle)
- - [Angular](#angular)
+ - [Arborescence des fichiers](#angular)
  - [Installation](#installation)
  - [Usage](#usage)
  - [Support](#support)
@@ -52,12 +52,10 @@ Ce framework Angular repose sur une architecture MVC : Modèle -Vue - Contrôleu
 - L’ensemble des APIs est rendu fonctionnel via la présence d’un serveur Apache
 
 
-### Angular
-A noter :
-- Le contrôleur et le modèle sont représentés par l'instance de la classe TypeScript de chaque composant (fichiers ts). Le contrôleur met à jour l'état du modèle.
-- La vue correspond au rendu associé à chaque composant (fichiers html). La vue déclenche des actions sur le contrôleur et est associé à un fichier de style (fichiers scss)
+## Arborescence des fichiers
 
-Arborescence générale des fichiers
+Cette arborescence se présente comme suit :
+
 ```bash
 ├── home
 │   ├── admpampas
@@ -71,10 +69,6 @@ Arborescence générale des fichiers
 │   │               ├──app
 │   │                   ├──api
                             api.component.ts
-│   │                   ├──home
-│   │                       ├──home.component.ts
-                            ├──home.component.html
-                            ├──home.component.scss
 │   │                   ├──interface
 │   │                       ├──interface.component.ts  
                             ├──interface.component.html
@@ -95,14 +89,19 @@ Arborescence générale des fichiers
 │   │               ├──*.css
 │   │               ├──*.js
 │   │           ├──appli
-│   ├── run
-│   ├── images
-│   ├── index.html
-│   ├── js
-│   │   ├── **/*.js
-│   └── xxx/xxxx
-├── lib
+
 ```
+
+Rôle des principaux dossiers :
+- "plateforme" : répertoire du projet Angular
+- "node_modules" : ensemble des librairies et modules JS installés via le gestionnaire npm
+- "scripts" : scripts de remplissage de la base de données
+- "api" : déclaration des API Rest communiquant avec le backend Node JS
+- "interface" : ensemble des fichiers relatifs à la page principale de l'application PWIP
+A noter que le contrôleur et le modèle sont représentés par l'instance de la classe TypeScript du composant (fichiers ts). Le contrôleur met à jour l'état du modèle. La vue correspond au rendu associé au fichier html. La vue déclenche des actions sur le contrôleur et est associé au fichier de style scss.
+- "notification" : mise en place du service de notification ToastrService 
+- "assets" : ressources additionnelles (fichiers images entre autres)
+- "pwip" : ensemble des fichiers de l'application issue de la compilation du projet Angular. Ces fichiers ont été déposés sur le serveur web du serveur.
 
 ## Installation et paramétrage
 ### Angular
