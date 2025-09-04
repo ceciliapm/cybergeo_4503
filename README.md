@@ -162,7 +162,7 @@ Pour toutes questions : [JHubert-at-forum-marais-atl.com, cecilia.pignon-mussaud
 
 ## License
 ![alt text](68747470733a2f2f692e6372656174697665636f6d6d6f6e732e6f72672f6c2f62792d73612f342e302f38307831352e706e67.png)
-L'ensemble de la documentation et des scripts de PWIP sont sous licence Creative Commons. Ils sont mis à disposition selon les termes de la Licence Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0 International.
+L'ensemble de la documentation et des scripts de PWIP sont sous licence Creative Commons. Ils sont mis à disposition selon les termes de la [Licence Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/).
 
 
 ## Statut du projet
