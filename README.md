@@ -68,7 +68,7 @@ Cette arborescence se présente comme suit :
 │   │           ├──src
 │   │               ├──app
 │   │                   ├──api
-                            api.component.ts
+                            api.service.ts
 │   │                   ├──interface
 │   │                       ├──interface.component.ts  
                             ├──interface.component.html
