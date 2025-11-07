@@ -166,5 +166,5 @@ L'ensemble de la documentation et des scripts de PWIP sont sous licence Creative
 
 
 ## Statut du projet
-Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par de l'ANR PAMPAS.
+Le développement de PWIP est actuellement arrêté, correspondant au livrable attendu par l'ANR PAMPAS.
 Néanmoins, une nouvelle version est à l'étude pour intégrer la salinité des marais dans les simulations. 
