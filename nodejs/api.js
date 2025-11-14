@@ -10,7 +10,7 @@ const { AlignmentType, Document, Packer, Paragraph } = docx;
 const client = new Client({
     user: '***',
     host: 'localhost',
-    database: 'pampas',
+    database: 'xxxxx',
     password: '***',
     port: 5432
 });
