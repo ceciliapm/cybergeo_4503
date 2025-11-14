@@ -3,17 +3,17 @@ La table des scénarios (« scenarios.base_scenarios ») permet d’associer l�
 
 Supposant que les indices de sensibilité ont auparavant été associés aux objets patrimoniaux, le processus à suivre est le suivant :
 
-1/ Se connecter à la base de données PAMPAS et supprimer le contenu de la table des scénarios :
+1/ Se connecter à la base de données xxxxx et supprimer le contenu de la table des scénarios :
 ```\q
 su postgres
-psql -d pampas
+psql -d xxxxx
 delete from scenarios.base_scenarios
 ```
 
 2/ Sortir de la base de données et exécuter le script PHP de remplissage de la table des scénarios :
 ```\q
 exit
-cd /home/admpampas/scripts
+cd /home/adm/scripts
 php fillScenario.php
 ```
 
@@ -40,4 +40,5 @@ select distinct nom_vue  from scenarios.base_scenarios bs where objet is null ;
 select distinct nom_vue  from scenarios.base_scenarios bs where id_fiche is null ;
 select distinct nom_vue  from scenarios.base_scenarios bs where fonction is null ;
 select distinct nom_vue  from scenarios.base_scenarios bs where groupe is null ;
+
 ```
