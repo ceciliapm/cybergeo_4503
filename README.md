@@ -58,7 +58,7 @@ Cette arborescence se présente comme suit :
 
 ```bash
 ├── home
-│   ├── adm
+│   ├── adm 
 │   │   ├──scripts
 │   │        ├──fillScenario.php
 │   │        ├──resumeAttributs.php
