@@ -7,7 +7,7 @@ const AdmZip = require('adm-zip');
 const pool = new Pool({
     user: '***',
     host: 'localhost',
-    database: 'pampas',
+    database: 'xxxxx',
     password: '***',
     port: 5432
 });
