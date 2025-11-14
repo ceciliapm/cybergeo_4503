@@ -10,7 +10,7 @@
 /**
  * Connexion à la base de données PostgreSQL
  */
-$connect = pg_connect("host=localhost port=5432 dbname=pampas user=xxxxx password=xxxxx");
+$connect = pg_connect("host=localhost port=5432 dbname=xxxxx user=xxxxx password=xxxxx");
 
 /**
  * Création de la table attributs dans le schéma idpatrimoniale (à n'executer qu'une seule fois).
